@@ -1,0 +1,990 @@
+openapi: 3.0.1
+info:
+  title: Event Management System API Doc
+  version: 1.0.0
+  description: API Documentation for Event Managment System placed on NIBM.
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Version 1
+security:
+  - BearerAuth: []
+
+paths:
+  /admin/login:
+    post:
+      summary: Admin login
+      description: This endpoint for allows an admin to log into the system.In here genarated Token from JWT
+      tags:
+        - Auth
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              required:
+                - username
+                - password
+      responses:
+        "200":
+          description: Login successful
+        "400":
+          description: Invalid login credentials
+  /admin/student/register:
+    post:
+      summary: Register a student
+      description: This endpoint allows an admin to create a new student for account.
+      tags:
+        - Auth
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+              required:
+                - name
+                - email
+      responses:
+        "201":
+          description: Student account created successfully!
+        "400":
+          description: Invalid input
+  /lecturer/students:
+    get:
+      summary: View all students in the system for a selected batch
+      description: Allows a lecturer to view all registered students in a specific batch.
+      tags:
+        - Lecturer
+      parameters:
+        - name: batchId
+          in: query
+          description: The ID of the batch to filter students.
+          required: true
+          schema:
+            type: string
+            example: "batch-2024"
+      responses:
+        "200":
+          description: List of students in the selected batch
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: "12345"
+                    name:
+                      type: string
+                      example: "John Doe"
+                    email:
+                      type: string
+                      format: email
+                      example: "john.doe@example.com"
+
+  /admin/student/{studentId}:
+    put:
+      summary: Update student details
+      description: Allows an admin to update a student's details.
+      tags:
+        - Admin
+      parameters:
+        - name: studentId
+          in: path
+          description: ID of the student to be updated
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+              required:
+                - name
+                - email
+      responses:
+        "200":
+          description: Student updated successfully
+
+        "400":
+          description: Invalid input
+  /admin/assign/student:
+    post:
+      summary: Assign students to batches
+      description: Allows an admin to assign students to specific batches.
+      tags:
+        - Admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                studentId:
+                  type: string
+                batchId:
+                  type: string
+              required:
+                - studentId
+                - batchId
+      responses:
+        "200":
+          description: Student assigned to batch successfully
+        "400":
+          description: Invalid input
+  /admin/batches:
+    post:
+      summary: Create a batch
+      description: Allows an admin to create a new batch.
+      tags:
+        - Admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                batchName:
+                  type: string
+                batchDescription:
+                  type: string
+              required:
+                - batchName
+                - batchDescription
+      responses:
+        "201":
+          description: Batch created successfully
+        "400":
+          description: Invalid input
+  /admin/assign/lecturer:
+    post:
+      summary: Assign batch to lecturer
+      description: Allows an admin to assign a batch to a lecturer.
+      tags:
+        - Admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                lecturerId:
+                  type: string
+                batchId:
+                  type: string
+              required:
+                - lecturerId
+                - batchId
+      responses:
+        "200":
+          description: Batch assigned to lecturer successfully
+        "400":
+          description: Invalid input
+  /admin/lecturer/register:
+    post:
+      summary: Add a lecturer
+      description: Allows an admin to add a new lecturer.
+      tags:
+        - Auth
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+              required:
+                - name
+                - email
+      responses:
+        "201":
+          description: lecturer added successfully
+        "400":
+          description: Invalid input
+  /admin/lecturer/{lecturerId}:
+    put:
+      summary: Update lecturer details
+      description: Allows an admin to update lecturer details.
+      tags:
+        - Admin
+      parameters:
+        - name: lecturerId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the lecturer to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+      responses:
+        "200":
+          description: lecturer updated successfully
+        "400":
+          description: Invalid input
+  /admin/events:
+    get:
+      summary: View complete or upcoming events
+      description: Allows an admin to view all events, filtered by their status (e.g., past or upcoming).
+      tags:
+        - Admin
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [completed, upcoming]
+          description: Filter events by their status (completed for past events, upcoming for future events).
+      responses:
+        "200":
+          description: List of events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    eventName:
+                      type: string
+                    date:
+                      type: string
+                      format: date
+                    location:
+                      type: string
+  /lecturer/login:
+    post:
+      summary: lecturer login
+      description: Allows a lecturer to log into the system.
+      tags:
+        - Auth
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              required:
+                - username
+                - password
+      responses:
+        "200":
+          description: Login successful
+        "400":
+          description: Invalid login credentials
+  /lecturer/events/create/interview:
+    post:
+      summary: Create an interview event
+      description: Allows a lecturer to create a new interview event.
+      tags:
+        - Lecturer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                eventName:
+                  type: string
+                date:
+                  type: string
+                  format: date
+                location:
+                  type: string
+                interviewer:
+                  type: string
+              required:
+                - eventName
+                - date
+                - location
+                - interviewer
+      responses:
+        "201":
+          description: Interview event created successfully
+        "400":
+          description: Invalid input
+
+  /lecturer/events/create/workshop:
+    post:
+      summary: Create a workshop event
+      description: Allows a lecturer to create a new workshop event.
+      tags:
+        - Lecturer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                eventName:
+                  type: string
+                date:
+                  type: string
+                  format: date
+                location:
+                  type: string
+                topics:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - eventName
+                - date
+                - location
+                - topics
+      responses:
+        "201":
+          description: Workshop event created successfully
+        "400":
+          description: Invalid input
+
+  /lecturer/events/{eventId}:
+    put:
+      summary: Update event details
+      description: Allows a lecturer to update event details.
+      tags:
+        - Lecturer
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the event to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                eventName:
+                  type: string
+                date:
+                  type: string
+                  format: date
+                location:
+                  type: string
+      responses:
+        "200":
+          description: Event updated successfully
+        "400":
+          description: Invalid input
+  /lecturer/announcements:
+    post:
+      summary: Make announcement
+      description: Allows a lecturer to make an announcement for batches.
+      tags:
+        - Lecturer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                batchId:
+                  type: string
+                message:
+                  type: string
+              required:
+                - batchId
+                - message
+      responses:
+        "201":
+          description: Announcement made successfully
+        "400":
+          description: Invalid input
+  /students/profile:
+    put:
+      summary: Update personal portfolio
+      description: Allows a student to update their personal portfolio.
+      tags:
+        - Student
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                bio:
+                  type: string
+                skills:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        "200":
+          description: Portfolio updated successfully
+        "400":
+          description: Invalid input
+  /students/portfolio:
+    put:
+      summary: Maintain career portfolio
+      description: Allows a student to maintain their career portfolio.
+      tags:
+        - Student
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                careerObjective:
+                  type: string
+                skills:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        "200":
+          description: Career portfolio updated successfully
+        "400":
+          description: Invalid input
+  /students/events:
+    get:
+      summary: View assigned events
+      description: Allows a student to view all assigned events.
+      tags:
+        - Student
+      responses:
+        "200":
+          description: List of events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    eventName:
+                      type: string
+                    date:
+                      type: string
+                      format: date
+  /students/events/search:
+    get:
+      summary: Search events
+      description: Allows a student to search for events based on date or name.
+      tags:
+        - Student
+      parameters:
+        - name: query
+          in: query
+          description: Search query (event name or date)
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of matching events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    eventName:
+                      type: string
+                    date:
+                      type: string
+                      format: date
+  /students/feedback:
+    post:
+      summary: Submit feedback for a lecturer
+      description: Allows a student to submit feedback for a specific lecturer.
+      tags:
+        - Student
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                eventId:
+                  type: string
+                feedback:
+                  type: string
+      responses:
+        "200":
+          description: Feedback submitted successfully
+        "400":
+          description: Invalid input
+  /admins/state:
+    get:
+      summary: View overall state of application
+      description: Allows an admin to view the overall state of the application.
+      tags:
+        - Admin
+      responses:
+        "200":
+          description: Application state details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalStudents:
+                    type: integer
+                  totallecturer:
+                    type: integer
+                  totalEvents:
+                    type: integer
+  /students/feedbacks:
+    get:
+      summary: View feedback received from lecturer
+      description: Allows a student to view feedback received from lecturer for events.
+      tags:
+        - Student
+      responses:
+        "200":
+          description: List of feedback
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    eventId:
+                      type: string
+                    feedback:
+                      type: string
+  /students/announcements:
+    get:
+      summary: View announcements
+      description: Allows a student to view announcements made by lecturer for batches.
+      tags:
+        - Student
+      responses:
+        "200":
+          description: List of announcements
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    batchId:
+                      type: string
+                    message:
+                      type: string
+  /students/opportunities:
+    get:
+      summary: View interviews and workshops
+      description: Allows a student to view available interviews and workshops for their batches.
+      tags:
+        - Student
+      responses:
+        "200":
+          description: List of interviews and workshops
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: Unique identifier for the opportunity
+                    type:
+                      type: string
+                      description: Type of the opportunity (e.g., "Interview" or "Workshop")
+                    batchId:
+                      type: string
+                      description: Batch ID associated with the opportunity
+                    title:
+                      type: string
+                      description: Title or name of the opportunity
+                    description:
+                      type: string
+                      description: Details or description of the opportunity
+                    scheduledAt:
+                      type: string
+                      format: date-time
+                      description: Date and time the opportunity is scheduled
+        "404":
+          description: No opportunities found
+  /lecturer/assign/interviews:
+    post:
+      summary: Assign interviews for individuals
+      description: Allows a lecturer to assign interviews to a set of students.
+      tags:
+        - Lecturer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                students:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      studentId:
+                        type: string
+                      interviewDetails:
+                        type: string
+                    required:
+                      - studentId
+                      - interviewDetails
+              required:
+                - students
+      responses:
+        "200":
+          description: Interviews assigned successfully
+        "400":
+          description: Invalid input
+
+  /students/login:
+    post:
+      summary: Student login
+      description: Allows a student to log into the system.
+      tags:
+        - Auth
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              required:
+                - username
+                - password
+      responses:
+        "200":
+          description: Login successful
+        "400":
+          description: Invalid login credentials
+  /lecturer/events/{eventId}/feedback/{studentId}:
+    post:
+      summary: Submit feedback for an event
+      description: Allows a lecturer to submit feedback for a specific student in an event.
+      tags:
+        - Lecturer
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the event for which feedback is being submitted
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the student for whom feedback is being submitted
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                feedback:
+                  type: string
+                  description: The feedback text
+              required:
+                - feedback
+      responses:
+        "200":
+          description: Feedback submitted successfully
+        "400":
+          description: Invalid input
+  /lecturer/events/{eventId}/status:
+    put:
+      summary: Update event status
+      description: Allows a lecturer to update the status of an event (e.g., scheduled, completed).
+      tags:
+        - Lecturer
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the event to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum:
+                    - scheduled
+                    - completed
+                    - cancelled
+                  description: The new status of the event
+              required:
+                - status
+      responses:
+        "200":
+          description: Event status updated successfully
+        "400":
+          description: Invalid status value
+  /lecturer/events/{eventId}/cancel:
+    delete:
+      summary: Cancel an event
+      description: Allows a lecturer to cancel an event.
+      tags:
+        - Lecturer
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the event to cancel
+      responses:
+        "204":
+          description: Event cancelled successfully
+        "404":
+          description: Event not found
+  /admin/student/remove/{studentId}:
+    delete:
+      summary: Remove a student
+      description: Allows a admin to remove a student.
+      tags:
+        - Admin
+      parameters:
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the student to remove
+      responses:
+        "204":
+          description: Student removed successfully
+        "404":
+          description: Student not found
+  /admin/lecturer/remove/{lecturerId}:
+    delete:
+      summary: Remove a lecturer
+      description: Allows a admin to remove a lecturer.
+      tags:
+        - Admin
+      parameters:
+        - name: lecturerId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the lecturer to remove
+      responses:
+        "204":
+          description: lecturer removed successfully
+        "404":
+          description: lecturer not found
+  /lecturer/events/{eventId}/feedbacks:
+    get:
+      summary: View feedback from students for an event
+      description: Allows a lecturer to view feedback submitted by students for a specific event.
+      tags:
+        - Lecturer
+      parameters:
+        - name: eventId
+          in: path
+          description: ID of the event to view feedback for
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of feedback from students
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    studentId:
+                      type: string
+                      description: ID of the student who submitted the feedback
+                    feedback:
+                      type: string
+                      description: The feedback content
+                    submittedAt:
+                      type: string
+                      format: date-time
+                      description: Timestamp of when the feedback was submitted
+        "404":
+          description: Event not found
+
+  /auth/logout:
+    post:
+      summary: Logout
+      description: Logs out the user and invalidates the current JWT token.
+      tags:
+        - Auth
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Logout successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Logout successful. Token invalidated."
+        "401":
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid token or token expired."
+
+  /lecturer/{lecturerId}/badges:
+    get:
+      summary: Get all active badges for a specific lecturer
+      description: Retrieves a list of all active badges assigned to a specific lecturer.
+      tags:
+        - Lecturer
+      parameters:
+        - name: lecturerId
+          in: path
+          required: true
+          description: The ID of the lecturer.
+          schema:
+            type: string
+            example: "lecturer-789"
+      responses:
+        "200":
+          description: A list of active badges for the lecturer
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: "badge-123"
+                    name:
+                      type: string
+                      example: "Top Contributor"
+                    description:
+                      type: string
+                      example: "Awarded to lecturers who contribute significantly to the platform."
+                    active:
+                      type: boolean
+                      example: true
+                    createdAt:
+                      type: string
+                      format: date-time
+                      example: "2024-12-11T10:30:00Z"
+        "401":
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid or missing token."
+        "404":
+          description: No active badges found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "No active badges available."
