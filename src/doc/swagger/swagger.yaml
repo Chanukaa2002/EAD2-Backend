@@ -43,13 +43,14 @@ paths:
           description: Login successful
         "400":
           description: Invalid login credentials
+
   /admin/student/register:
     post:
       summary: Register a student
-      description: This endpoint allows an admin to create a new student for account.
+      description: This endpoint allows an admin to create a new student account.
       tags:
         - Auth
-      security: []
+      security: [] # No security required for this endpoint
       requestBody:
         required: true
         content:
@@ -59,17 +60,60 @@ paths:
               properties:
                 name:
                   type: string
+                  example: "John Doe"
                 email:
                   type: string
                   format: email
+                  example: "john.doe@example.com"
+                username:
+                  type: string
+                  example: "johndoe123"
+                password:
+                  type: string
+                  format: password
+                  example: "StrongP@ssword1"
+                profilepic:
+                  type: string
+                  format: binary
+                  description: Profile picture of the student.
+                age:
+                  type: integer
+                  example: 21
+                batchId:
+                  type: string
+                  example: "batch-101"
               required:
                 - name
                 - email
+                - username
+                - password
+                - age
+                - batchId
       responses:
         "201":
           description: Student account created successfully!
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Student account created successfully!"
+                  studentId:
+                    type: string
+                    example: "student-123"
         "400":
           description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid input. Please check the provided data."
+
   /lecturer/students:
     get:
       summary: View all students in the system for a selected batch
@@ -96,14 +140,10 @@ paths:
                   properties:
                     id:
                       type: string
-                      example: "12345"
+                      example: "student-123"
                     name:
                       type: string
                       example: "John Doe"
-                    email:
-                      type: string
-                      format: email
-                      example: "john.doe@example.com"
 
   /admin/student/{studentId}:
     put:
@@ -127,47 +167,42 @@ paths:
               properties:
                 name:
                   type: string
+                  example: "John Doe"
                 email:
                   type: string
                   format: email
+                  example: "john.doe@example.com"
+                username:
+                  type: string
+                  example: "johndoe123"
+                password:
+                  type: string
+                  format: password
+                  example: "StrongP@ssword1"
+                profilepic:
+                  type: string
+                  format: binary
+                  description: Profile picture of the student.
+                age:
+                  type: integer
+                  example: 21
               required:
                 - name
                 - email
+                - username
+                - password
+                - age
       responses:
         "200":
           description: Student updated successfully
 
         "400":
           description: Invalid input
-  /admin/assign/student:
-    post:
-      summary: Assign students to batches
-      description: Allows an admin to assign students to specific batches.
-      tags:
-        - Admin
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                studentId:
-                  type: string
-                batchId:
-                  type: string
-              required:
-                - studentId
-                - batchId
-      responses:
-        "200":
-          description: Student assigned to batch successfully
-        "400":
-          description: Invalid input
+
   /admin/batches:
     post:
       summary: Create a batch
-      description: Allows an admin to create a new batch.
+      description: Allows an admin to create a new batch for a course.
       tags:
         - Admin
       requestBody:
@@ -179,41 +214,65 @@ paths:
               properties:
                 batchName:
                   type: string
-                batchDescription:
+                  example: "Batch A"
+                  description: Name of the batch.
+                course:
                   type: string
+                  example: "Software Engineering"
+                  description: Course associated with the batch.
+                status:
+                  type: string
+                  enum:
+                    - active
+                    - inactive
+                  example: "active"
+                  description: Status of the batch (e.g., active or inactive).
+                start_date:
+                  type: string
+                  format: date
+                  example: "2024-01-15"
+                  description: Start date of the batch.
+                end_date:
+                  type: string
+                  format: date
+                  example: "2024-06-30"
+                  description: End date of the batch.
+                lectureId:
+                  type: string
+                  example: "lecturer-123"
+                  description: ID of the lecturer assigned to the batch.
               required:
                 - batchName
-                - batchDescription
+                - course
+                - status
+                - start_date
+                - end_date
+                - lectureId
       responses:
         "201":
           description: Batch created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Batch created successfully."
+                  batchId:
+                    type: string
+                    example: "batch-456"
         "400":
           description: Invalid input
-  /admin/assign/lecturer:
-    post:
-      summary: Assign batch to lecturer
-      description: Allows an admin to assign a batch to a lecturer.
-      tags:
-        - Admin
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                lecturerId:
-                  type: string
-                batchId:
-                  type: string
-              required:
-                - lecturerId
-                - batchId
-      responses:
-        "200":
-          description: Batch assigned to lecturer successfully
-        "400":
-          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid input. Please check the provided data."
+
   /admin/lecturer/register:
     post:
       summary: Add a lecturer
@@ -233,18 +292,29 @@ paths:
                 email:
                   type: string
                   format: email
+                username:
+                  type: string
+                password:
+                  type: string
+                contact:
+                  type: string
+
               required:
                 - name
                 - email
+                - username
+                - password
+                - contact
       responses:
         "201":
           description: lecturer added successfully
         "400":
           description: Invalid input
+
   /admin/lecturer/{lecturerId}:
     put:
       summary: Update lecturer details
-      description: Allows an admin to update lecturer details.
+      description: Allows an admin to update the details of a lecturer.
       tags:
         - Admin
       parameters:
@@ -253,24 +323,63 @@ paths:
           required: true
           schema:
             type: string
-          description: ID of the lecturer to update
+          description: ID of the lecturer to update.
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
+              required:
+                - name
+                - email
+                - username
+                - password
+                - contact
               properties:
                 name:
                   type: string
+                  example: "John Doe"
                 email:
                   type: string
                   format: email
+                  example: "john.doe@example.com"
+                username:
+                  type: string
+                  example: "johndoe"
+                password:
+                  type: string
+                  format: password
+                  example: "StrongP@ssword123"
+                contact:
+                  type: string
+                  example: "+1-123-456-7890"
       responses:
         "200":
-          description: lecturer updated successfully
+          description: Lecturer details updated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Lecturer details updated successfully."
+                  lecturerId:
+                    type: string
+                    example: "lecturer-789"
         "400":
           description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid input. Please check the provided data."
+
+
   /admin/events:
     get:
       summary: View complete or upcoming events
@@ -295,15 +404,16 @@ paths:
                 items:
                   type: object
                   properties:
-                    id:
+                    event_id:
                       type: string
                     eventName:
                       type: string
                     date:
                       type: string
                       format: date
-                    location:
+                    lecturer_id:
                       type: string
+
   /lecturer/login:
     post:
       summary: lecturer login
@@ -330,6 +440,7 @@ paths:
           description: Login successful
         "400":
           description: Invalid login credentials
+
   /lecturer/events/create/interview:
     post:
       summary: Create an interview event
@@ -348,6 +459,8 @@ paths:
                 date:
                   type: string
                   format: date
+                status:
+                  type: string
                 location:
                   type: string
                 interviewer:
@@ -355,6 +468,7 @@ paths:
               required:
                 - eventName
                 - date
+                - status
                 - location
                 - interviewer
       responses:
@@ -378,58 +492,59 @@ paths:
               properties:
                 eventName:
                   type: string
+                  example: "AI and Machine Learning Workshop"
                 date:
                   type: string
                   format: date
+                  example: "2024-12-15"
+                status:
+                  type: string
                 location:
                   type: string
-                topics:
+                  example: "Auditorium 3, Tech Campus"
+                topic:
                   type: array
                   items:
                     type: string
+                  example: [ "Artificial Intelligence", "Deep Learning Basics" ]
+                speaker:
+                  type: string
+                  example: "Dr. Jane Smith"
+                duration:
+                  type: string
+                  example: "02:30"
               required:
                 - eventName
                 - date
                 - location
-                - topics
+                - topic
+                - speaker
+                - duration
       responses:
         "201":
-          description: Workshop event created successfully
+          description: Workshop event created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Workshop event created successfully."
+                  eventId:
+                    type: string
+                    example: "event-12345"
         "400":
           description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid input. Please check the provided data."
 
-  /lecturer/events/{eventId}:
-    put:
-      summary: Update event details
-      description: Allows a lecturer to update event details.
-      tags:
-        - Lecturer
-      parameters:
-        - name: eventId
-          in: path
-          required: true
-          schema:
-            type: string
-          description: ID of the event to update
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                eventName:
-                  type: string
-                date:
-                  type: string
-                  format: date
-                location:
-                  type: string
-      responses:
-        "200":
-          description: Event updated successfully
-        "400":
-          description: Invalid input
   /lecturer/announcements:
     post:
       summary: Make announcement
@@ -443,22 +558,35 @@ paths:
             schema:
               type: object
               properties:
+                eventName:
+                  type: string
+                  example: "AI and Machine Learning Workshop"
+                date:
+                  type: string
+                  format: date
+                  example: "2024-12-15"
+                status:
+                  type: string
                 batchId:
                   type: string
-                message:
+                description:
                   type: string
               required:
+                - eventName
+                - date
+                - status
                 - batchId
-                - message
+                - description
       responses:
         "201":
           description: Announcement made successfully
         "400":
           description: Invalid input
+
   /students/profile:
     put:
-      summary: Update personal portfolio
-      description: Allows a student to update their personal portfolio.
+      summary: Update student profile
+      description: Allows a student to update their personal profile information.
       tags:
         - Student
       requestBody:
@@ -470,17 +598,59 @@ paths:
               properties:
                 name:
                   type: string
-                bio:
+                  example: "John Doe"
+                  description: Full name of the student.
+                email:
                   type: string
-                skills:
-                  type: array
-                  items:
-                    type: string
+                  format: email
+                  example: "john.doe@example.com"
+                  description: Email address of the student.
+                username:
+                  type: string
+                  example: "johndoe123"
+                  description: Username for the student's account.
+                password:
+                  type: string
+                  format: password
+                  example: "StrongP@ssword1"
+                  description: Password for the student's account.
+                age:
+                  type: integer
+                  example: 21
+                  description: Age of the student.
+                batchId:
+                  type: string
+                  example: "batch-101"
+                  description: Identifier for the batch the student belongs to.
+              required:
+                - name
+                - email
+                - username
+                - password
+                - age
+                - batchId
       responses:
         "200":
-          description: Portfolio updated successfully
+          description: Student profile updated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Student profile updated successfully."
         "400":
           description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid input. Please check the provided data."
+
   /students/portfolio:
     put:
       summary: Maintain career portfolio
@@ -494,17 +664,22 @@ paths:
             schema:
               type: object
               properties:
-                careerObjective:
+                description:
                   type: string
-                skills:
-                  type: array
-                  items:
-                    type: string
+                education:
+                  type: string
+                achievement:
+                  type: string
+              required:
+                - description
+                - education
+                - achievement
       responses:
         "200":
           description: Career portfolio updated successfully
         "400":
           description: Invalid input
+
   /students/events:
     get:
       summary: View assigned events
@@ -528,10 +703,11 @@ paths:
                     date:
                       type: string
                       format: date
+
   /students/events/search:
     get:
       summary: Search events
-      description: Allows a student to search for events based on date or name.
+      description: Allows a student to search for events based on date, name, or type.
       tags:
         - Student
       parameters:
@@ -541,6 +717,16 @@ paths:
           required: true
           schema:
             type: string
+        - name: eventType
+          in: query
+          description: Filter events by type (e.g., "workshop", "interview")
+          required: false
+          schema:
+            type: string
+            enum:
+              - workshop
+              - interview
+            example: "workshop"
       responses:
         "200":
           description: List of matching events
@@ -553,11 +739,22 @@ paths:
                   properties:
                     id:
                       type: string
+                      example: "event-101"
+                      description: Unique identifier for the event.
                     eventName:
                       type: string
+                      example: "AI Workshop"
+                      description: Name of the event.
                     date:
                       type: string
                       format: date
+                      example: "2024-12-15"
+                      description: Date of the event in YYYY-MM-DD format.
+                    eventType:
+                      type: string
+                      example: "workshop"
+                      description: Type of the event.
+
   /students/feedback:
     post:
       summary: Submit feedback for a lecturer
@@ -573,13 +770,26 @@ paths:
               properties:
                 eventId:
                   type: string
-                feedback:
+                description:
                   type: string
+                  description: Feedback msg
+                sender:
+                  type: string
+                  description: Lecturer or Student
+                receiver:
+                  type: string
+                  description: Lecturer or Student
+                lectureId:
+                  type: string
+                studentId:
+                  type: string
+
       responses:
         "200":
           description: Feedback submitted successfully
         "400":
           description: Invalid input
+
   /admins/state:
     get:
       summary: View overall state of application
@@ -600,6 +810,7 @@ paths:
                     type: integer
                   totalEvents:
                     type: integer
+
   /students/feedbacks:
     get:
       summary: View feedback received from lecturer
@@ -620,6 +831,7 @@ paths:
                       type: string
                     feedback:
                       type: string
+
   /students/announcements:
     get:
       summary: View announcements
@@ -642,43 +854,7 @@ paths:
                       type: string
                     message:
                       type: string
-  /students/opportunities:
-    get:
-      summary: View interviews and workshops
-      description: Allows a student to view available interviews and workshops for their batches.
-      tags:
-        - Student
-      responses:
-        "200":
-          description: List of interviews and workshops
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                      description: Unique identifier for the opportunity
-                    type:
-                      type: string
-                      description: Type of the opportunity (e.g., "Interview" or "Workshop")
-                    batchId:
-                      type: string
-                      description: Batch ID associated with the opportunity
-                    title:
-                      type: string
-                      description: Title or name of the opportunity
-                    description:
-                      type: string
-                      description: Details or description of the opportunity
-                    scheduledAt:
-                      type: string
-                      format: date-time
-                      description: Date and time the opportunity is scheduled
-        "404":
-          description: No opportunities found
+
   /lecturer/assign/interviews:
     post:
       summary: Assign interviews for individuals
@@ -738,6 +914,7 @@ paths:
           description: Login successful
         "400":
           description: Invalid login credentials
+
   /lecturer/events/{eventId}/feedback/{studentId}:
     post:
       summary: Submit feedback for an event
@@ -774,10 +951,11 @@ paths:
           description: Feedback submitted successfully
         "400":
           description: Invalid input
+
   /lecturer/events/{eventId}/status:
     put:
       summary: Update event status
-      description: Allows a lecturer to update the status of an event (e.g., scheduled, completed).
+      description: Allows a lecturer to update the status of an event (e.g., upcoming, completed).
       tags:
         - Lecturer
       parameters:
@@ -797,9 +975,8 @@ paths:
                 status:
                   type: string
                   enum:
-                    - scheduled
+                    - upcoming
                     - completed
-                    - cancelled
                   description: The new status of the event
               required:
                 - status
@@ -808,6 +985,7 @@ paths:
           description: Event status updated successfully
         "400":
           description: Invalid status value
+
   /lecturer/events/{eventId}/cancel:
     delete:
       summary: Cancel an event
@@ -826,6 +1004,7 @@ paths:
           description: Event cancelled successfully
         "404":
           description: Event not found
+
   /admin/student/remove/{studentId}:
     delete:
       summary: Remove a student
@@ -844,6 +1023,7 @@ paths:
           description: Student removed successfully
         "404":
           description: Student not found
+
   /admin/lecturer/remove/{lecturerId}:
     delete:
       summary: Remove a lecturer
@@ -862,6 +1042,7 @@ paths:
           description: lecturer removed successfully
         "404":
           description: lecturer not found
+
   /lecturer/events/{eventId}/feedbacks:
     get:
       summary: View feedback from students for an event
@@ -958,16 +1139,9 @@ paths:
                     name:
                       type: string
                       example: "Top Contributor"
-                    description:
+                    status:
                       type: string
-                      example: "Awarded to lecturers who contribute significantly to the platform."
-                    active:
-                      type: boolean
-                      example: true
-                    createdAt:
-                      type: string
-                      format: date-time
-                      example: "2024-12-11T10:30:00Z"
+                      example: active
         "401":
           description: Unauthorized - Invalid or missing token
           content:
