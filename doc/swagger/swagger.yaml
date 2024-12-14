@@ -50,7 +50,6 @@ paths:
       description: This endpoint allows an admin to create a new student account.
       tags:
         - Auth
-      security: [] # No security required for this endpoint
       requestBody:
         required: true
         content:
@@ -279,7 +278,6 @@ paths:
       description: Allows an admin to add a new lecturer.
       tags:
         - Auth
-      security: []
       requestBody:
         required: true
         content:
