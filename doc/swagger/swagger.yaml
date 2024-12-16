@@ -41,8 +41,24 @@ paths:
       responses:
         "200":
           description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Login successful"
         "400":
           description: Invalid login credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid login credentials"
 
   /admin/student/register:
     post:
@@ -436,8 +452,24 @@ paths:
       responses:
         "200":
           description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Login successful"
         "400":
           description: Invalid login credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid login credentials"
 
   /lecturer/events/create/interview:
     post:
@@ -910,8 +942,24 @@ paths:
       responses:
         "200":
           description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Login successful"
         "400":
           description: Invalid login credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid login credentials"
 
   /lecturer/events/{eventId}/feedback/{studentId}:
     post:
