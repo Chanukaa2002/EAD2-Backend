@@ -3,18 +3,13 @@ info:
   title: Event Management System API Doc
   version: 1.0.0
   description: API Documentation for Event Managment System placed on NIBM.
-components:
-  securitySchemes:
-    BearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+
 
 servers:
   - url: http://localhost:8080/api/v1
     description: Version 1
   - url: https://virtserver.swaggerhub.com/ChanukaDilshan-8ba/event-management_system_api/1.0.0
-    description: Mock API Server
+    description: Mock Server
 security:
   - BearerAuth: []
 
@@ -43,24 +38,8 @@ paths:
       responses:
         "200":
           description: Login successful
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Login successful"
         "400":
           description: Invalid login credentials
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Invalid login credentials"
 
   /admin/student/register:
     post:
@@ -314,7 +293,6 @@ paths:
                   type: string
                 contact:
                   type: string
-
               required:
                 - name
                 - email
@@ -345,6 +323,7 @@ paths:
                   error:
                     type: string
                     example: "Invalid input. Please check the provided data."
+
 
   /admin/lecturer/{lecturerId}:
     put:
@@ -473,24 +452,8 @@ paths:
       responses:
         "200":
           description: Login successful
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Login successful"
         "400":
           description: Invalid login credentials
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Invalid login credentials"
 
   /lecturer/events/create/interview:
     post:
@@ -963,24 +926,8 @@ paths:
       responses:
         "200":
           description: Login successful
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Login successful"
         "400":
           description: Invalid login credentials
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Invalid login credentials"
 
   /lecturer/events/{eventId}/feedback/{studentId}:
     post:
@@ -1229,3 +1176,243 @@ paths:
                   message:
                     type: string
                     example: "No active badges available."
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Admin:
+      type: object
+      properties:
+        AID:
+          type: string
+        Name:
+          type: string
+        Username:
+          type: string
+        Password:
+          type: string
+          format: password
+      required:
+        - AID
+        - Name
+        - Username
+        - Password
+
+    Lecturer:
+      type: object
+      properties:
+        LID:
+          type: string
+        Username:
+          type: string
+        Name:
+          type: string
+        Email:
+          type: string
+          format: email
+        Password:
+          type: string
+          format: password
+        Contact:
+          type: string
+      required:
+        - LID
+        - Username
+        - Name
+        - Email
+        - Password
+        - Contact
+
+    Student:
+      type: object
+      properties:
+        SID:
+          type: string
+        Name:
+          type: string
+        Email:
+          type: string
+          format: email
+        Username:
+          type: string
+        Password:
+          type: string
+          format: password
+        ProfilePic:
+          type: string
+        Age:
+          type: integer
+        BID:
+          type: string
+        LID:
+          type: string
+      required:
+        - SID
+        - Name
+        - Email
+        - Username
+        - Password
+        - BID
+        - LID
+
+    Badge:
+      type: object
+      properties:
+        BID:
+          type: string
+        Name:
+          type: string
+        Course:
+          type: string
+        Status:
+          type: string
+        Date:
+          type: string
+          format: date
+        EndDate:
+          type: string
+          format: date
+        LID:
+          type: string
+      required:
+        - BID
+        - Name
+        - Course
+        - Status
+        - Date
+        - LID
+
+    Event:
+      type: object
+      properties:
+        EID:
+          type: string
+        Date:
+          type: string
+          format: date
+        Name:
+          type: string
+        Status:
+          type: string
+        LID:
+          type: string
+      required:
+        - EID
+        - Date
+        - Name
+        - Status
+        - LID
+
+    Workshop:
+      type: object
+      properties:
+        EID:
+          type: string
+        Location:
+          type: string
+        Topic:
+          type: string
+        Speaker:
+          type: string
+        Duration:
+          type: string
+        BID:
+          type: string
+      required:
+        - EID
+        - Location
+        - Topic
+        - Speaker
+        - Duration
+        - BID
+
+    Announcement:
+      type: object
+      properties:
+        EID:
+          type: string
+        Description:
+          type: string
+        BID:
+          type: string
+      required:
+        - EID
+        - Description
+        - BID
+
+    Interview:
+      type: object
+      properties:
+        EID:
+          type: string
+        Interviewer:
+          type: string
+        Location:
+          type: string
+      required:
+        - EID
+        - Interviewer
+        - Location
+
+    Feedback:
+      type: object
+      properties:
+        FID:
+          type: string
+        Sender:
+          type: string
+        Receiver:
+          type: string
+        Description:
+          type: string
+        EID:
+          type: string
+        SID:
+          type: string
+        LID:
+          type: string
+      required:
+        - FID
+        - Sender
+        - Receiver
+        - Description
+        - EID
+        - SID
+        - LID
+
+    Student_Interview:
+      type: object
+      properties:
+        EID:
+          type: string
+        SID:
+          type: string
+      required:
+        - EID
+        - SID
+
+    CareerPortfolio:
+      type: object
+      properties:
+        CID:
+          type: string
+        Description:
+          type: string
+        Education:
+          type: string
+        Achievements:
+          type: string
+        SID:
+          type: string
+      required:
+        - CID
+        - Description
+        - Education
+        - Achievements
+        - SID
+
