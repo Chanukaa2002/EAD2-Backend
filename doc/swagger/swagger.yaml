@@ -323,9 +323,28 @@ paths:
                 - contact
       responses:
         "201":
-          description: lecturer added successfully
+          description: Lecturer account created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Lecturer account created successfully!"
+                  studentId:
+                    type: string
+                    example: "lecturer-123"
         "400":
-          description: Invalid input
+          description: Invalid input.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid input. Please check the provided data."
 
   /admin/lecturer/{lecturerId}:
     put:
