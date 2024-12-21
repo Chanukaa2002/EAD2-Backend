@@ -1,14 +1,14 @@
 openapi: 3.0.1
 info:
   title: Event Management System API Doc
-  version: 1.0.0
+  version: '1'
   description: API Documentation for Event Managment System placed on NIBM.
 
 
 servers:
   - url: http://localhost:8080/api/v1
     description: Version 1
-  - url: https://virtserver.swaggerhub.com/ChanukaDilshan-8ba/event-management_system_api/1.0.0
+  - url: https://virtserver.swaggerhub.com/MCHANUKA72/NibmEvex/1.0.0
     description: Mock Server
 security:
   - BearerAuth: []
@@ -38,9 +38,104 @@ paths:
       responses:
         "200":
           description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: JWT token for the authenticated admin
+                  message:
+                    type: string
+                    description: Success message
+                example:
+                  message: "Login successful"
         "400":
           description: Invalid login credentials
-
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+                example:
+                  error: "Invalid username or password"
+  /lecturer/workshops:
+    get:
+      summary: View current workshops
+      description: Allows a lecturer to view current workshops with optional filters.
+      tags:
+        - Lecturer
+      parameters:
+        - name: status
+          in: query
+          description: Filter by workshop status (e.g., "ongoing", "upcoming", "completed")
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of current workshops
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    eid:
+                      type: string
+                      example: Event-001
+                    topic:
+                      type: string
+                      example: OOP Session
+                    location:
+                      type: string
+                      example: Hall-02
+                    speaker:
+                      type: string
+                      example: Chanuka Dilshan
+                    duration:
+                      type: string
+                      example: 6h
+                    bid:
+                      type: string
+                      example: DSE24.1f
+  /lecturer/interviews:
+    get:
+      summary: View current Interviews
+      description: Allows a lecturer to view current interviews with optional filters.
+      tags:
+        - Lecturer
+      parameters:
+        - name: status
+          in: query
+          description: Filter by workshop status (e.g., "ongoing", "upcoming", "completed")
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of current Interviews
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    eid:
+                      type: string
+                      example: Event-002
+                    interviewer:
+                      type: string
+                      example: John doe
+                    location:
+                      type: string
+                      example: Library
   /admin/student/register:
     post:
       summary: Register a student
@@ -109,7 +204,6 @@ paths:
                   error:
                     type: string
                     example: "Invalid input. Please check the provided data."
-
   /lecturer/students:
     get:
       summary: View all students in the system for a selected batch
@@ -140,7 +234,6 @@ paths:
                     name:
                       type: string
                       example: "John Doe"
-
   /admin/student/{studentId}:
     put:
       summary: Update student details
@@ -194,7 +287,6 @@ paths:
 
         "400":
           description: Invalid input
-
   /admin/batches:
     post:
       summary: Create a batch
@@ -268,7 +360,6 @@ paths:
                   error:
                     type: string
                     example: "Invalid input. Please check the provided data."
-
   /admin/lecturer/register:
     post:
       summary: Add a lecturer
@@ -323,8 +414,6 @@ paths:
                   error:
                     type: string
                     example: "Invalid input. Please check the provided data."
-
-
   /admin/lecturer/{lecturerId}:
     put:
       summary: Update lecturer details
@@ -392,8 +481,6 @@ paths:
                   error:
                     type: string
                     example: "Invalid input. Please check the provided data."
-
-
   /admin/events:
     get:
       summary: View complete or upcoming events
@@ -427,7 +514,6 @@ paths:
                       format: date
                     lecturer_id:
                       type: string
-
   /lecturer/login:
     post:
       summary: lecturer login
@@ -452,9 +538,31 @@ paths:
       responses:
         "200":
           description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: JWT token for the authenticated admin
+                  message:
+                    type: string
+                    description: Success message
+                example:
+                  message: "Login successful"
         "400":
           description: Invalid login credentials
-
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+                example:
+                  error: "Invalid username or password"
   /lecturer/events/create/interview:
     post:
       summary: Create an interview event
@@ -490,7 +598,6 @@ paths:
           description: Interview event created successfully
         "400":
           description: Invalid input
-
   /lecturer/events/create/workshop:
     post:
       summary: Create a workshop event
@@ -558,7 +665,6 @@ paths:
                   error:
                     type: string
                     example: "Invalid input. Please check the provided data."
-
   /lecturer/announcements:
     post:
       summary: Make announcement
@@ -596,7 +702,6 @@ paths:
           description: Announcement made successfully
         "400":
           description: Invalid input
-
   /students/profile:
     put:
       summary: Update student profile
@@ -664,7 +769,6 @@ paths:
                   error:
                     type: string
                     example: "Invalid input. Please check the provided data."
-
   /students/portfolio:
     put:
       summary: Maintain career portfolio
@@ -768,7 +872,6 @@ paths:
                       type: string
                       example: "workshop"
                       description: Type of the event.
-
   /students/feedback:
     post:
       summary: Submit feedback for a lecturer
@@ -803,7 +906,6 @@ paths:
           description: Feedback submitted successfully
         "400":
           description: Invalid input
-
   /admins/state:
     get:
       summary: View overall state of application
@@ -824,7 +926,6 @@ paths:
                     type: integer
                   totalEvents:
                     type: integer
-
   /students/feedbacks:
     get:
       summary: View feedback received from lecturer
@@ -845,7 +946,6 @@ paths:
                       type: string
                     feedback:
                       type: string
-
   /students/announcements:
     get:
       summary: View announcements
@@ -868,7 +968,6 @@ paths:
                       type: string
                     message:
                       type: string
-
   /lecturer/assign/interviews:
     post:
       summary: Assign interviews for individuals
@@ -901,7 +1000,6 @@ paths:
           description: Interviews assigned successfully
         "400":
           description: Invalid input
-
   /students/login:
     post:
       summary: Student login
@@ -926,9 +1024,31 @@ paths:
       responses:
         "200":
           description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: JWT token for the authenticated admin
+                  message:
+                    type: string
+                    description: Success message
+                example:
+                  message: "Login successful"
         "400":
           description: Invalid login credentials
-
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+                example:
+                  error: "Invalid username or password"
   /lecturer/events/{eventId}/feedback/{studentId}:
     post:
       summary: Submit feedback for an event
@@ -965,7 +1085,6 @@ paths:
           description: Feedback submitted successfully
         "400":
           description: Invalid input
-
   /lecturer/events/{eventId}/status:
     put:
       summary: Update event status
@@ -999,7 +1118,6 @@ paths:
           description: Event status updated successfully
         "400":
           description: Invalid status value
-
   /lecturer/events/{eventId}/cancel:
     delete:
       summary: Cancel an event
@@ -1018,7 +1136,6 @@ paths:
           description: Event cancelled successfully
         "404":
           description: Event not found
-
   /admin/student/remove/{studentId}:
     delete:
       summary: Remove a student
@@ -1037,7 +1154,6 @@ paths:
           description: Student removed successfully
         "404":
           description: Student not found
-
   /admin/lecturer/remove/{lecturerId}:
     delete:
       summary: Remove a lecturer
@@ -1056,7 +1172,6 @@ paths:
           description: lecturer removed successfully
         "404":
           description: lecturer not found
-
   /lecturer/events/{eventId}/feedbacks:
     get:
       summary: View feedback from students for an event
@@ -1092,7 +1207,6 @@ paths:
                       description: Timestamp of when the feedback was submitted
         "404":
           description: Event not found
-
   /auth/logout:
     post:
       summary: Logout
@@ -1122,7 +1236,6 @@ paths:
                   error:
                     type: string
                     example: "Invalid token or token expired."
-
   /lecturer/{lecturerId}/badges:
     get:
       summary: Get all active badges for a specific lecturer
@@ -1415,4 +1528,3 @@ components:
         - Education
         - Achievements
         - SID
-
