@@ -17,7 +17,6 @@ public class AuthController {
         this.authService = authService;
     }
 
-    // Admin Login
     @PostMapping("/admin/login")
     public ResponseEntity<LoginResponse> adminLogin(@RequestBody LoginRequest request) {
         try {
@@ -28,7 +27,6 @@ public class AuthController {
         }
     }
 
-    // Lecturer Login
     @PostMapping("/lecturer/login")
     public ResponseEntity<LoginResponse> lecturerLogin(@RequestBody LoginRequest request) {
         try {
@@ -39,7 +37,6 @@ public class AuthController {
         }
     }
 
-    // Student Login
     @PostMapping("/student/login")
     public ResponseEntity<LoginResponse> studentLogin(@RequestBody LoginRequest request) {
         try {
