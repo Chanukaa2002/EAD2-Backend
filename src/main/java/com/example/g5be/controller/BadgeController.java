@@ -19,6 +19,7 @@ public class BadgeController {
         this.badgeService = badgeService;
     }
 
+
     @PostMapping("/batches")
     public ResponseEntity<String> registerBadge(@RequestBody Badge badge) {
         badgeService.registerBadge(badge);
