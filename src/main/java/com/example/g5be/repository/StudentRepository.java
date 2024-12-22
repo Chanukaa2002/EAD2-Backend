@@ -1,6 +1,6 @@
 package com.example.g5be.repository;
 
-
+import com.example.g5be.model.Badge;
 import com.example.g5be.model.Student;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -17,7 +17,7 @@ public class StudentRepository {
     // Find a student by username
     public Student findByUsername(String username) {
         try {
-            String sql = "SELECT * FROM Student WHERE Username = ?";
+            String sql = "SELECT s.*, b.bid AS BadgeID, b.name AS BadgeName FROM Student s LEFT JOIN Badge b ON s.BID = b.bid WHERE s.Username = ?";
             return jdbcTemplate.queryForObject(sql, new Object[]{username}, (rs, rowNum) -> {
                 Student student = new Student();
                 student.setSid(rs.getString("SID"));
@@ -27,7 +27,12 @@ public class StudentRepository {
                 student.setPassword(rs.getString("Password"));
                 student.setProfilePic(rs.getString("ProfilePic"));
                 student.setAge(rs.getInt("Age"));
-                student.setBid(rs.getString("BID"));
+
+                Badge badge = new Badge();
+                badge.setBid(rs.getString("BadgeID"));
+                badge.setName(rs.getString("BadgeName"));
+                student.setBadge(badge);
+
                 return student;
             });
         } catch (Exception e) {
@@ -46,7 +51,7 @@ public class StudentRepository {
                 student.getPassword(),
                 student.getProfilePic(),
                 student.getAge(),
-                student.getBid());
+                student.getBadge() != null ? student.getBadge().getBid() : null);
     }
 
     // Find the last student ID
@@ -69,7 +74,7 @@ public class StudentRepository {
                 student.getPassword(),
                 student.getProfilePic(),
                 student.getAge(),
-                student.getBid(),
+                student.getBadge() != null ? student.getBadge().getBid() : null,
                 student.getSid());
     }
 

@@ -1,8 +1,8 @@
 package com.example.g5be.model;
 
-
 import jakarta.persistence.*;
 import java.util.Date;
+
 @Entity
 @Table(name = "Badge")
 public class Badge {
@@ -18,13 +18,12 @@ public class Badge {
     private Date date;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "EndDate")
+    @Column(name = "End_Date") // Mapping to a specific physical column "End_Date"
     private Date endDate;
 
     @ManyToOne
     @JoinColumn(name = "LID", referencedColumnName = "LID", nullable = false)
     private Lecturer lecturer;
-
 
     // Getters and setters
     public String getBid() {

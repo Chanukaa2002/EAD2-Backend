@@ -1,6 +1,5 @@
 package com.example.g5be.model;
 
-
 import jakarta.persistence.*;
 
 @Entity
@@ -22,8 +21,9 @@ public class Student {
 
     private int age;
 
-    @Column(name = "BID")
-    private String bid; // Foreign key reference to Badge table
+    @ManyToOne
+    @JoinColumn(name = "BID", referencedColumnName = "bid", nullable = false) // Mapping to Badge table
+    private Badge badge; // Foreign key reference to Badge table
 
     // Getters and Setters
     public String getSid() {
@@ -82,11 +82,11 @@ public class Student {
         this.age = age;
     }
 
-    public String getBid() {
-        return bid;
+    public Badge getBadge() {
+        return badge;
     }
 
-    public void setBid(String bid) {
-        this.bid = bid;
+    public void setBadge(Badge badge) {
+        this.badge = badge;
     }
 }
