@@ -8,7 +8,7 @@ info:
 servers:
   - url: http://localhost:8080/api/v1
     description: Version 1
-  - url: https://virtserver.swaggerhub.com/MCHANUKA72/NibmEvex/1.0.0
+  - url: https://virtserver.swaggerhub.com/MCHANUKA72/NibmEvex/1
     description: Mock Server
 security:
   - BearerAuth: []
@@ -104,6 +104,16 @@ paths:
                     bid:
                       type: string
                       example: DSE24.1f
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Workshops not found"
   /lecturer/interviews:
     get:
       summary: View current Interviews
@@ -136,6 +146,16 @@ paths:
                     location:
                       type: string
                       example: Library
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Interviews not found"
   /admin/student/register:
     post:
       summary: Register a student
@@ -234,6 +254,16 @@ paths:
                     name:
                       type: string
                       example: "John Doe"
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Students Not found"
   /admin/student/{studentId}:
     put:
       summary: Update student details
@@ -284,9 +314,24 @@ paths:
       responses:
         "200":
           description: Student updated successfully
-
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Student updated successfully"
         "400":
           description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid input provided"
   /admin/batches:
     post:
       summary: Create a batch
@@ -514,6 +559,16 @@ paths:
                       format: date
                     lecturer_id:
                       type: string
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Not found"
   /lecturer/login:
     post:
       summary: lecturer login
@@ -596,8 +651,46 @@ paths:
       responses:
         "201":
           description: Interview event created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Interview event created successfully"
+                  eventId:
+                    type: string
+                    example: "EVT12345"
+                  eventDetails:
+                    type: object
+                    properties:
+                      eventName:
+                        type: string
+                        example: "Technical Interview"
+                      date:
+                        type: string
+                        format: date
+                        example: "2024-12-25"
+                      status:
+                        type: string
+                        example: "Scheduled"
+                      location:
+                        type: string
+                        example: "Conference Room 1"
+                      interviewer:
+                        type: string
+                        example: "Dr. Jane Smith"
         "400":
           description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid input provided"
   /lecturer/events/create/workshop:
     post:
       summary: Create a workshop event
@@ -699,9 +792,25 @@ paths:
                 - description
       responses:
         "201":
-          description: Announcement made successfully
+          description: Interview event created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Interview event created successfully"
         "400":
           description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid input provided"
   /students/profile:
     put:
       summary: Update student profile
@@ -795,18 +904,33 @@ paths:
       responses:
         "200":
           description: Career portfolio updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Career portfolio updated successfully"
         "400":
           description: Invalid input
-
-  /students/events:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid input provided"
+  /students/interviews:
     get:
-      summary: View assigned events
-      description: Allows a student to view all assigned events.
+      summary: View assigned Interviews
+      description: Allows a student to view all assigned Interviews.
       tags:
         - Student
       responses:
         "200":
-          description: List of events
+          description: List of interviews
           content:
             application/json:
               schema:
@@ -814,14 +938,79 @@ paths:
                 items:
                   type: object
                   properties:
-                    id:
-                      type: string
                     eventName:
                       type: string
                     date:
                       type: string
                       format: date
-
+                    status:
+                      type: string
+                    location:
+                      type: string
+                    interviewer:
+                      type: string
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Inteviews not found"
+  /students/workshops:
+    get:
+      summary: View assigned workshops
+      description: Allows a student to view all assigned workshops.
+      tags:
+        - Student
+      responses:
+        "200":
+          description: List of workshops
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    eventName:
+                      type: string
+                      example: "AI and Machine Learning Workshop"
+                    date:
+                      type: string
+                      format: date
+                      example: "2024-12-15"
+                    status:
+                      type: string
+                    location:
+                      type: string
+                      example: "Auditorium 3, Tech Campus"
+                    topic:
+                      type: array
+                      items:
+                        type: string
+                      example: [ "Artificial Intelligence", "Deep Learning Basics" ]
+                    speaker:
+                      type: string
+                      example: "Dr. Jane Smith"
+                    duration:
+                      type: string
+                      example: "02:30"
+                    batchId:
+                      type: string
+                      example: "GAHDSE242F"
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Workshops not found"
   /students/events/search:
     get:
       summary: Search events
@@ -872,6 +1061,16 @@ paths:
                       type: string
                       example: "workshop"
                       description: Type of the event.
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid query parameter"
   /students/feedback:
     post:
       summary: Submit feedback for a lecturer
@@ -904,8 +1103,24 @@ paths:
       responses:
         "200":
           description: Feedback submitted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Feedback submitted successfully."
         "400":
           description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid input provided"
   /admins/state:
     get:
       summary: View overall state of application
@@ -926,6 +1141,16 @@ paths:
                     type: integer
                   totalEvents:
                     type: integer
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "details not found"
   /students/feedbacks:
     get:
       summary: View feedback received from lecturer
@@ -946,6 +1171,16 @@ paths:
                       type: string
                     feedback:
                       type: string
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Feedbacks not found"
   /students/announcements:
     get:
       summary: View announcements
@@ -968,6 +1203,16 @@ paths:
                       type: string
                     message:
                       type: string
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Announcements not found"
   /lecturer/assign/interviews:
     post:
       summary: Assign interviews for individuals
@@ -998,8 +1243,42 @@ paths:
       responses:
         "200":
           description: Interviews assigned successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Interviews assigned successfully."
+                  assignedInterviews:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        studentId:
+                          type: string
+                          example: "student-101"
+                        interviewDetails:
+                          type: string
+                          example: "Scheduled on 2024-12-25 at 10:00 AM in Room 302"
         "400":
           description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid input provided"
+                  details:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - "Student ID is required for all students"
+                      - "Interview details must not be empty"
   /students/login:
     post:
       summary: Student login
@@ -1082,9 +1361,85 @@ paths:
                 - feedback
       responses:
         "200":
-          description: Feedback submitted successfully
+          description: Send feedback
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+                example:
+                  message: "Feedback send Successfully"
         "400":
-          description: Invalid input
+          description: Feedback send failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+                example:
+                  error: "Feedback send failed!"
+  /lecturer/events/{eventId}/feedback/{batchId}:
+    post:
+      summary: Submit feedback for an event
+      description: Allows a lecturer to submit feedback for a specific batch in an event.
+      tags:
+        - Lecturer
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the event for which feedback is being submitted
+        - name: batchId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the batch for whom feedback is being submitted
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                feedback:
+                  type: string
+                  description: The feedback text
+              required:
+                - feedback
+      responses:
+        "200":
+          description: Send feedback
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+                example:
+                  message: "Feedback send Successfully"
+        "400":
+          description: Feedback send failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+                example:
+                  error: "Feedback send failed!"
   /lecturer/events/{eventId}/status:
     put:
       summary: Update event status
@@ -1116,8 +1471,24 @@ paths:
       responses:
         "200":
           description: Event status updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Event status updated successfully."
         "400":
           description: Invalid status value
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid status value"
   /lecturer/events/{eventId}/cancel:
     delete:
       summary: Cancel an event
@@ -1134,8 +1505,24 @@ paths:
       responses:
         "204":
           description: Event cancelled successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Event cancelled successfully."
         "404":
           description: Event not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Event not found."
   /admin/student/remove/{studentId}:
     delete:
       summary: Remove a student
@@ -1152,8 +1539,24 @@ paths:
       responses:
         "204":
           description: Student removed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Student removed successfully."
         "404":
           description: Student not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Student not found."
   /admin/lecturer/remove/{lecturerId}:
     delete:
       summary: Remove a lecturer
@@ -1169,9 +1572,25 @@ paths:
           description: ID of the lecturer to remove
       responses:
         "204":
-          description: lecturer removed successfully
+          description: Lecturer removed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Lecturer removed successfully."
         "404":
-          description: lecturer not found
+          description: Lecturer not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Lecturer not found."
   /lecturer/events/{eventId}/feedbacks:
     get:
       summary: View feedback from students for an event
@@ -1206,7 +1625,15 @@ paths:
                       format: date-time
                       description: Timestamp of when the feedback was submitted
         "404":
-          description: Event not found
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Feedbacks not found"
   /auth/logout:
     post:
       summary: Logout
@@ -1296,7 +1723,6 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-
   schemas:
     Admin:
       type: object
