@@ -17,14 +17,12 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    // Register a new student
     @PostMapping("/register")
     public ResponseEntity<String> registerStudent(@RequestBody Student student) {
         studentService.registerStudent(student);
         return ResponseEntity.ok("Student registered successfully");
     }
 
-    // Update an existing student
     @PutMapping("/{sid}")
     public ResponseEntity<String> updateStudent(@PathVariable String sid, @RequestBody Student student) {
         studentService.updateStudent(sid, student);
