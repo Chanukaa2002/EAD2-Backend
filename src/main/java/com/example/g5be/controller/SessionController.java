@@ -15,12 +15,12 @@ public class SessionController {
         this.httpSession = httpSession;
     }
 
+
     @GetMapping("/details")
     public String getSessionDetails() {
         String id = (String) httpSession.getAttribute("id");
         String token = (String) httpSession.getAttribute("token");
         String role = (String) httpSession.getAttribute("role");
-
         return "ID: " + id + ", Token: " + token + ", Role: " + role;
     }
 }
