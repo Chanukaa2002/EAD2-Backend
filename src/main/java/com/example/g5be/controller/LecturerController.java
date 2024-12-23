@@ -32,7 +32,7 @@ public class LecturerController {
         return ResponseEntity.ok("Lecturer registered successfully");
     }
 
-    @PutMapping("/{lecturerId}")
+    @PutMapping("/{lid}")
     public ResponseEntity<String> updateLecturer(@PathVariable String lid, @RequestBody Lecturer lecturer) {
         // Check if the user is authorized as admin
         String role = (String) httpSession.getAttribute("role");
@@ -46,7 +46,7 @@ public class LecturerController {
         return ResponseEntity.ok("Lecturer updated successfully");
     }
 
-    @DeleteMapping("/remove/{lecturerId}")
+    @DeleteMapping("/remove/{lid}")
     public ResponseEntity<String> deleteLecturer(@PathVariable String lid) {
         // Check if the user is authorized as admin
         String role = (String) httpSession.getAttribute("role");

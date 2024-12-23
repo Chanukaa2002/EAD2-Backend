@@ -27,14 +27,14 @@ public class StudentController {
     }
 
     // Update an existing student
-    @PutMapping("/admin/student/{studentId}\n")
+    @PutMapping("/admin/student/{sid}")
     public ResponseEntity<String> updateStudent(@PathVariable String sid, @RequestBody Student student) {
         studentService.updateStudent(sid, student);
         return ResponseEntity.ok("Student updated successfully");
     }
 
     // Delete a student by ID
-    @DeleteMapping("/admin/student/remove/{studentId}")
+    @DeleteMapping("/admin/student/remove/{sid}")
     public ResponseEntity<String> deleteStudent(@PathVariable String sid) {
         studentService.deleteStudent(sid);
         return ResponseEntity.ok("Student deleted successfully");

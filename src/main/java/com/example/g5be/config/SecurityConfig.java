@@ -32,7 +32,7 @@ public class SecurityConfig {
                         "/lecturer/events/workshops",/// ///////
                         "/api/v1/admin/student/register", // Student registration
                         "/api/v1/admin/student/**", // Student update endpoint
-                        "/api/v1/admin/student/remove/", // Student delete endpoint
+                        "/api/v1/admin/student/remove/**", // Student delete endpoint
                         "/api/v1/lecturer/events/create/interview",// Create interview
                         "/api/v1/lecturer/events/create/workshop",   // Create workshop
                         "/api/events/list",            // List all events
