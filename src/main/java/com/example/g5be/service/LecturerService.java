@@ -1,6 +1,5 @@
 package com.example.g5be.service;
 
-
 import com.example.g5be.model.Lecturer;
 import com.example.g5be.repository.LecturerRepository;
 import org.springframework.stereotype.Service;
