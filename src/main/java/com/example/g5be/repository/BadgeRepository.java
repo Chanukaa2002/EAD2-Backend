@@ -1,6 +1,5 @@
 package com.example.g5be.repository;
 
-
 import com.example.g5be.model.Badge;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -14,28 +13,31 @@ public class BadgeRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
-    // Save a Badge
     @Transactional
     public void save(Badge badge) {
         entityManager.persist(badge);
     }
 
-    // Find a Badge by ID
     public Badge findById(String bid) {
         return entityManager.find(Badge.class, bid);
     }
 
-    // Find All Badges
     public List<Badge> findAll() {
         return entityManager.createQuery("SELECT b FROM Badge b", Badge.class).getResultList();
     }
 
-    // Delete a Badge by ID
     @Transactional
     public void deleteById(String bid) {
         Badge badge = findById(bid);
         if (badge != null) {
             entityManager.remove(badge);
         }
+    }
+
+    public List<Badge> findBadgesByLecturer(String lecturerId) {
+        return entityManager.createQuery(
+                        "SELECT b FROM Badge b WHERE b.lecturer.lid = :lecturerId AND b.status = 'Active'", Badge.class)
+                .setParameter("lecturerId", lecturerId)
+                .getResultList();
     }
 }
