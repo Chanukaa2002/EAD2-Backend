@@ -1,4 +1,4 @@
-package com.example.testbe.dto;
+package com.example.g5be.dto;
 
 import java.util.Date;
 

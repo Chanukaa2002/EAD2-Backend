@@ -19,21 +19,22 @@ public class SecurityConfig {
                 .csrf().disable() // Disable CSRF for APIs
                 .authorizeHttpRequests()
                 .requestMatchers(
-                        "/api/auth/admin/login", // Admin login
-                        "/api/auth/lecturer/login", // Lecturer login
-                        "/api/auth/student/login", // Student login
-                        "/api/lecturer/register", // Lecturer registration endpoint
-                        "/api/lecturer/update/**", // Lecturer update endpoint
-                        "/api/lecturer/delete/**", // Lecturer delete endpoint
+                        "/api/v1/admin/login", // Admin login
+                        "/api/v1/lecturer/login", // Lecturer login
+                        "/api/v1/student/login", // Student login
+                        "/api/v1/admin/lecturer/", // Lecturer registration endpoint
+                        "/api/v1/admin/lecturer/**", // Lecturer update endpoint
+                        "/api/v1/admin/lecturer/remove/**", // Lecturer delete endpoint
                         "/api/session/details", // Session details
-                        "/api/badge/register", // Badge registration
-                        "/api/badge/lecturer/badges",
-                        "/lecturer/events/create/workshop",
-                        "/lecturer/events/workshops",
-                        "/api/student/register", // Student registration
-                        "/api/student/update/**", // Student update endpoint
-                        "/api/student/delete/**", // Student delete endpoint
-                        "/api/events/create",          // Create event
+                        "/api/v1/admin/batches", // Badge registration
+                        "/api/badge/lecturer/badges",/// ////////
+                        "/lecturer/events/create/workshop",/// /////////
+                        "/lecturer/events/workshops",/// ///////
+                        "/api/v1/admin/student/register", // Student registration
+                        "/api/v1/admin/student/**", // Student update endpoint
+                        "/api/v1/admin/student/remove/", // Student delete endpoint
+                        "/api/v1/lecturer/events/create/interview",// Create interview
+                        "/api/v1/lecturer/events/create/workshop",   // Create workshop
                         "/api/events/list",            // List all events
                         "/api/events/{eid}/update-status", // Update event status
                         "/api/events/{eid}",           // Delete event
