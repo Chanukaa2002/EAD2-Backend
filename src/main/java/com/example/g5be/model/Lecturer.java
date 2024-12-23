@@ -1,6 +1,5 @@
 package com.example.g5be.model;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;

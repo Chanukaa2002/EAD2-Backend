@@ -1,5 +1,6 @@
 package com.example.g5be.model;
 
+
 public class Admin {
     private String aid;
     private String name;
