@@ -1,7 +1,7 @@
 package com.example.g5be.repository;
 
 
-
+import com.example.g5be.model.Admin;
 import com.example.g5be.model.Admin;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -29,5 +29,37 @@ public class AdminRepository {
         } catch (Exception e) {
             return null; // User not found
         }
+    }
+
+    public int countAdmins() {
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Admin", Integer.class);
+    }
+
+    public int countLecturers() {
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Lecturer", Integer.class);
+    }
+
+    public int countStudents() {
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Student", Integer.class);
+    }
+
+    public int countEvents() {
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Event", Integer.class);
+    }
+
+    public int countWorkshops() {
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Workshop", Integer.class);
+    }
+
+    public int countAnnouncements() {
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Announcement", Integer.class);
+    }
+
+    public int countInterviews() {
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Interview", Integer.class);
+    }
+
+    public int countFeedback() {
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Feedback", Integer.class);
     }
 }
