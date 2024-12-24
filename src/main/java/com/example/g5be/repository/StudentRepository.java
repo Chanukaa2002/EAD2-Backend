@@ -5,6 +5,8 @@ import com.example.g5be.model.Student;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class StudentRepository {
 
@@ -83,4 +85,33 @@ public class StudentRepository {
         String sql = "DELETE FROM Student WHERE SID = ?";
         jdbcTemplate.update(sql, sid);
     }
+
+    public List<Student> findStudentsByBatch(String bid) {
+        String sql = """
+            SELECT s.SID, s.Name, s.Email, s.Username, s.Password, s.ProfilePic, s.Age, b.bid AS BadgeID, b.name AS BadgeName
+            FROM Student s
+            INNER JOIN Badge b ON s.BID = b.bid
+            WHERE b.bid = ?
+            """;
+
+        return jdbcTemplate.query(sql, new Object[]{bid}, (rs, rowNum) -> {
+            Student student = new Student();
+            student.setSid(rs.getString("SID"));
+            student.setName(rs.getString("Name"));
+            student.setEmail(rs.getString("Email"));
+            student.setUsername(rs.getString("Username"));
+            student.setPassword(rs.getString("Password"));
+            student.setProfilePic(rs.getString("ProfilePic"));
+            student.setAge(rs.getInt("Age"));
+
+            // Set only the bid and badge name in the badge object
+            Badge badge = new Badge();
+            badge.setBid(rs.getString("BadgeID"));
+            badge.setName(rs.getString("BadgeName"));
+            student.setBadge(badge);
+
+            return student;
+        });
+    }
+
 }

@@ -1,7 +1,5 @@
 package com.example.g5be.controller;
 
-
-
 import com.example.g5be.model.LoginRequest;
 import com.example.g5be.model.LoginResponse;
 import com.example.g5be.service.AuthService;
@@ -47,4 +45,3 @@ public class AuthController {
         }
     }
 }
-

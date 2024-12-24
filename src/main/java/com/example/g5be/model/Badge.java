@@ -1,5 +1,6 @@
 package com.example.g5be.model;
 
+
 import jakarta.persistence.*;
 import java.util.Date;
 

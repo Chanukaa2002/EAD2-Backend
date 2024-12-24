@@ -1,6 +1,5 @@
 package com.example.g5be.controller;
 
-
 import com.example.g5be.model.Lecturer;
 import com.example.g5be.service.LecturerService;
 import jakarta.servlet.http.HttpSession;
@@ -21,26 +20,28 @@ public class LecturerController {
 
     @PostMapping("/register")
     public ResponseEntity<String> registerLecturer(@RequestBody Lecturer lecturer) {
-
+        // Check if the user is authorized as admin
         String role = (String) httpSession.getAttribute("role");
 
         if (role == null || !role.equals("ROLE_ADMIN")) {
             return ResponseEntity.status(403).body("Access Denied: Only admins can register lecturers.");
         }
 
+        // Proceed with registration
         lecturerService.registerLecturer(lecturer);
         return ResponseEntity.ok("Lecturer registered successfully");
     }
 
     @PutMapping("/{lid}")
     public ResponseEntity<String> updateLecturer(@PathVariable String lid, @RequestBody Lecturer lecturer) {
-
+        // Check if the user is authorized as admin
         String role = (String) httpSession.getAttribute("role");
 
         if (role == null || !role.equals("ROLE_ADMIN")) {
             return ResponseEntity.status(403).body("Access Denied: Only admins can update lecturers.");
         }
 
+        // Proceed with update
         lecturerService.updateLecturer(lid, lecturer);
         return ResponseEntity.ok("Lecturer updated successfully");
     }
@@ -59,4 +60,3 @@ public class LecturerController {
         return ResponseEntity.ok("Lecturer deleted successfully");
     }
 }
-

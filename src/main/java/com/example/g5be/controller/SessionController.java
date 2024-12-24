@@ -15,7 +15,6 @@ public class SessionController {
         this.httpSession = httpSession;
     }
 
-
     @GetMapping("/details")
     public String getSessionDetails() {
         String id = (String) httpSession.getAttribute("id");
@@ -24,4 +23,3 @@ public class SessionController {
         return "ID: " + id + ", Token: " + token + ", Role: " + role;
     }
 }
-

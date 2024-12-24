@@ -1,10 +1,12 @@
 package com.example.g5be.service;
 
-
+import com.example.g5be.dto.StudentResponse;
 import com.example.g5be.model.Student;
 import com.example.g5be.repository.StudentRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class StudentService {
@@ -60,4 +62,31 @@ public class StudentService {
         int idNumber = Integer.parseInt(lastId.substring(1)); // Remove "S" prefix
         return String.format("S%03d", idNumber + 1); // Format as "S001", "S002", etc.
     }
+
+    public List<StudentResponse> getStudentsByBatch(String bid) {
+        List<Student> students = studentRepository.findStudentsByBatch(bid);
+
+        // Convert Student to StudentResponse
+        return students.stream().map(student -> {
+            StudentResponse response = new StudentResponse();
+            response.setSid(student.getSid());
+            response.setName(student.getName());
+            response.setEmail(student.getEmail());
+            response.setUsername(student.getUsername());
+            response.setProfilePic(student.getProfilePic());
+            response.setAge(student.getAge());
+
+            // Set badge details
+            if (student.getBadge() != null) {
+                StudentResponse.BadgeResponse badgeResponse = new StudentResponse.BadgeResponse();
+                badgeResponse.setBid(student.getBadge().getBid());
+                badgeResponse.setName(student.getBadge().getName());
+                response.setBadge(badgeResponse);
+            }
+
+            return response;
+        }).toList();
+    }
+
+
 }
