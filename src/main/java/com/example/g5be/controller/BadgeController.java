@@ -26,7 +26,7 @@ public class BadgeController {
         return ResponseEntity.ok("Badge registered successfully");
     }
 
-    @GetMapping("/lecturer/{lecturerId}/badges")
+    @GetMapping("/lecturer/badges")
     public ResponseEntity<?> getBadgesByLecturer() {
         // Get lecturer ID from session
         String role = (String) httpSession.getAttribute("role");
