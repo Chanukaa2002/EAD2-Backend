@@ -54,7 +54,9 @@ public class SecurityConfig {
                         "/api/v1/lecturer/interviews",// new added
                         "/api/v1/workshops",// new added
                         "/api/v1/lecturer/assign/interviews",// new added
-                        "/api/v1/lecturer/badges"// new added
+                        "/api/v1/lecturer/badges",// new added
+                        "/api/v1/admins/state",
+                        "/api/v1/admins/events"
                 ).permitAll() // Allow unauthenticated access to these endpoints
                 .anyRequest().authenticated() // All other endpoints require authentication
                 .and()
