@@ -42,4 +42,24 @@ public class InterviewRepository {
     }
 
 
+    public List<InterviewDTO> findInterviewsByStudentId(String studentId) {
+        String sql = """
+            SELECT i.EID, i.Interviewer, i.Location, e.Date
+            FROM Student_Interview si
+            INNER JOIN Interview i ON si.EID = i.EID
+            INNER JOIN Event e ON i.EID = e.EID
+            WHERE si.SID = ?
+             ORDER BY e.Date DESC
+            """;
+
+        return jdbcTemplate.query(sql, new Object[]{studentId}, (rs, rowNum) -> {
+            InterviewDTO interviewDTO = new InterviewDTO();
+            interviewDTO.setEid(rs.getString("EID"));
+            interviewDTO.setInterviewer(rs.getString("Interviewer"));
+            interviewDTO.setLocation(rs.getString("Location"));
+            interviewDTO.setDate(rs.getDate("Date")); // Set the interview date
+            return interviewDTO;
+        });
+    }
+
 }

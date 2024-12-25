@@ -38,5 +38,9 @@ public class InterviewService {
         return interviewRepository.findInterviewsByLecturerId(lecturerId);
     }
 
+    public List<InterviewDTO> getInterviewsByStudentId(String studentId) {
+        return interviewRepository.findInterviewsByStudentId(studentId);
+    }
+
 
 }
