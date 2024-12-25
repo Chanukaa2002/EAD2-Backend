@@ -3,6 +3,7 @@ package com.example.g5be.service;
 import com.example.g5be.dto.StudentResponse;
 import com.example.g5be.model.Student;
 import com.example.g5be.repository.StudentRepository;
+import com.example.g5be.service.CareerPortfolioService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +13,12 @@ import java.util.List;
 public class StudentService {
 
     private final StudentRepository studentRepository;
+    private final CareerPortfolioService careerPortfolioService;
     private final HttpSession httpSession;
 
-    public StudentService(StudentRepository studentRepository, HttpSession httpSession) {
+    public StudentService(StudentRepository studentRepository, CareerPortfolioService careerPortfolioService, HttpSession httpSession) {
         this.studentRepository = studentRepository;
+        this.careerPortfolioService = careerPortfolioService;
         this.httpSession = httpSession;
     }
 
@@ -28,6 +31,9 @@ public class StudentService {
 
         // Save the student
         studentRepository.save(student);
+
+        // Create a CareerPortfolio entry
+        careerPortfolioService.createCareerPortfolio(nextId);
     }
 
     public void updateStudent(String sid, Student updatedStudent) {
@@ -45,6 +51,9 @@ public class StudentService {
 
         // Delete the student
         studentRepository.deleteById(sid);
+
+        // Delete the corresponding CareerPortfolio
+        careerPortfolioService.deleteCareerPortfolioByStudentId(sid);
     }
 
     private void checkAdminAccess() {
@@ -88,5 +97,11 @@ public class StudentService {
         }).toList();
     }
 
+    public void updateStudentProfile(String studentId, Student updatedStudent) {
+        // Ensure the SID is set correctly
+        updatedStudent.setSid(studentId);
 
+        // Update the student in the database
+        studentRepository.update(updatedStudent);
+    }
 }
