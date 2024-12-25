@@ -80,4 +80,23 @@ public class WorkshopController {
         }
     }
 
+    @GetMapping("/student/workshops") //added new
+    public ResponseEntity<?> getWorkshopsForStudent() {
+        // Validate Student Role
+        String role = (String) httpSession.getAttribute("role");
+        String studentId = (String) httpSession.getAttribute("id");
+
+        if (role == null || !role.equals("ROLE_STUDENT")) {
+            return ResponseEntity.status(403).body("Access Denied: Only students can view their workshops.");
+        }
+
+        try {
+            List<WorkshopResponse> workshops = workshopService.getWorkshopsByStudentId(studentId);
+            return ResponseEntity.ok(workshops);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
+
+
 }

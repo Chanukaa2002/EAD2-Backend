@@ -3,6 +3,7 @@ package com.example.g5be.controller;
 import com.example.g5be.dto.StudentResponse;
 import com.example.g5be.model.Student;
 import com.example.g5be.service.StudentService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +15,11 @@ import java.util.List;
 public class StudentController {
 
     private final StudentService studentService;
+    private final HttpSession httpSession;
 
-    public StudentController(StudentService studentService) {
+    public StudentController(StudentService studentService, HttpSession httpSession) {
         this.studentService = studentService;
+        this.httpSession = httpSession;
     }
 
     // Register a new student
@@ -52,6 +55,24 @@ public class StudentController {
             // Fetch students for the batch
             List<StudentResponse> students = studentService.getStudentsByBatch(bid);
             return ResponseEntity.ok(students);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/students/profile")
+    public ResponseEntity<String> updateProfile(@RequestBody Student student) {
+        // Get the student ID from session
+        String role = (String) httpSession.getAttribute("role");
+        String studentId = (String) httpSession.getAttribute("id");
+
+        if (role == null || !role.equals("ROLE_STUDENT")) {
+            return ResponseEntity.status(403).body("Access Denied: Only students can update their profile.");
+        }
+
+        try {
+            studentService.updateStudentProfile(studentId, student);
+            return ResponseEntity.ok("Student profile updated successfully.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }

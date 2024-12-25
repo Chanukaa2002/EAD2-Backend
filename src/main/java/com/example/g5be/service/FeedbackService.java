@@ -23,7 +23,7 @@ public class FeedbackService {
         this.httpSession = httpSession;
     }
 
-    public void sendFeedback(FeedbackRequest request) {
+    public void sendFeedbackToStudent(FeedbackRequest request) {
         // Get the lecturer's ID from the session
         String lecturerId = (String) httpSession.getAttribute("id");
 

@@ -1,5 +1,6 @@
 package com.example.g5be.controller;
 
+import com.example.g5be.dto.AnnouncementDTO;
 import com.example.g5be.dto.AnnouncementRequest;
 import com.example.g5be.model.Announcement;
 import com.example.g5be.model.Event;
@@ -67,6 +68,24 @@ public class AnnouncementController {
         try {
 
             List<Announcement> announcements = announcementService.getAnnouncementsByLecturerId(lecturerId);
+            return ResponseEntity.ok(announcements);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
+    @GetMapping("/students/announcements") //change here
+    public ResponseEntity<?> getAnnouncementsForStudent() {
+        // Validate Student Role
+        String role = (String) httpSession.getAttribute("role");
+        String studentId = (String) httpSession.getAttribute("id");
+
+        if (role == null || !role.equals("ROLE_STUDENT")) {
+            return ResponseEntity.status(403).body("Access Denied: Only students can view announcements.");
+        }
+
+        try {
+            // Fetch announcements for the logged-in student
+            List<AnnouncementDTO> announcements = announcementService.getAnnouncementsForStudent(studentId);
             return ResponseEntity.ok(announcements);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
