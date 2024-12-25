@@ -71,4 +71,8 @@ public class AuthService {
         httpSession.setAttribute("token", token);
         httpSession.setAttribute("role", role);
     }
+
+    public void logout() {
+        httpSession.invalidate(); // Destroys the current session
+    }
 }
