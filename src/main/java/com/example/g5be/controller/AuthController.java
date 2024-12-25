@@ -3,6 +3,7 @@ package com.example.g5be.controller;
 import com.example.g5be.model.LoginRequest;
 import com.example.g5be.model.LoginResponse;
 import com.example.g5be.service.AuthService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 @RestController
@@ -42,6 +43,16 @@ public class AuthController {
             return ResponseEntity.ok(new LoginResponse("Student login successful", token));
         } catch (RuntimeException e) {
             return ResponseEntity.status(401).body(new LoginResponse(e.getMessage(), null));
+        }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpSession session) {
+        try {
+            authService.logout(); // Call the logout service
+            return ResponseEntity.ok("Logout successful.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error during logout: " + e.getMessage());
         }
     }
 }
