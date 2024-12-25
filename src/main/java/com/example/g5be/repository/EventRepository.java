@@ -101,4 +101,8 @@ public class EventRepository {
         event.setLid(rs.getString("LID"));
         return event;
     }
+    public String findLecturerIdByEventId(String eid) {
+        String sql = "SELECT LID FROM Event WHERE EID = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{eid}, String.class);
+    }
 }
