@@ -1,6 +1,7 @@
 package com.example.g5be.service;
 
 
+import com.example.g5be.dto.AnnouncementDTO;
 import com.example.g5be.model.Announcement;
 import com.example.g5be.model.Event;
 import com.example.g5be.repository.AnnouncementRepository;
@@ -40,5 +41,9 @@ public class AnnouncementService {
 
     public List<Announcement> getAnnouncementsByLecturerId(String lecturerId) {
         return announcementRepository.findAnnouncementsByLecturerId(lecturerId);
+    }
+
+    public List<AnnouncementDTO> getAnnouncementsForStudent(String studentId) {
+        return announcementRepository.findAnnouncementsByStudentId(studentId);
     }
 }
