@@ -1,6 +1,7 @@
 package com.example.g5be.service;
 
 
+import com.example.g5be.dto.WorkshopResponse;
 import com.example.g5be.model.Event;
 import com.example.g5be.model.Workshop;
 import com.example.g5be.repository.EventRepository;
@@ -33,7 +34,11 @@ public class WorkshopService {
         workshopRepository.save(workshop);
     }
 
-    public List<Workshop> getWorkshopsByLecturerId(String lecturerId) {
+    public List<WorkshopResponse> getWorkshopsByLecturerId(String lecturerId) {
         return workshopRepository.findWorkshopsByLecturerId(lecturerId);
+    }
+
+    public List<WorkshopResponse> getWorkshopsByStudentId(String studentId) {
+        return workshopRepository.findWorkshopsByStudentId(studentId);
     }
 }

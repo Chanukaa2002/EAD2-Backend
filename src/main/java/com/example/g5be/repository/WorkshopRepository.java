@@ -1,6 +1,7 @@
 package com.example.g5be.repository;
 
 
+import com.example.g5be.dto.WorkshopResponse;
 import com.example.g5be.model.Workshop;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -75,17 +76,56 @@ public class WorkshopRepository {
         }
     }
 
-    public List<Workshop> findWorkshopsByLecturerId(String lecturerId) {
+    public List<WorkshopResponse> findWorkshopsByLecturerId(String lecturerId) {
         String sql = """
-                SELECT w.EID, w.Location, w.Topic, w.Speaker, w.Duration, w.BID
-                FROM Workshop w
-                INNER JOIN Event e ON w.EID = e.EID
-                INNER JOIN Lecturer l ON e.LID = l.LID
-                WHERE l.LID = ?
-                """;
+        SELECT w.EID, w.Location, w.Topic, w.Speaker, w.Duration, w.BID, e.Date, e.Name, e.Status
+        FROM Workshop w
+        INNER JOIN Event e ON w.EID = e.EID
+        WHERE e.LID = ?
+        ORDER BY e.Date DESC
+    """;
 
-        return jdbcTemplate.query(sql, new Object[]{lecturerId}, new WorkshopRowMapper());
+        return jdbcTemplate.query(sql, new Object[]{lecturerId}, (rs, rowNum) -> {
+            WorkshopResponse response = new WorkshopResponse();
+            response.setEid(rs.getString("EID"));
+            response.setDate(rs.getDate("Date"));
+            response.setName(rs.getString("Name"));
+            response.setStatus(rs.getString("Status"));
+            response.setLocation(rs.getString("Location"));
+            response.setTopic(rs.getString("Topic"));
+            response.setSpeaker(rs.getString("Speaker"));
+            response.setDuration(rs.getString("Duration"));
+            response.setBid(rs.getString("BID"));
+            return response;
+        });
     }
+
+    public List<WorkshopResponse> findWorkshopsByStudentId(String studentId) {
+        String sql = """
+        SELECT w.EID, w.Location, w.Topic, w.Speaker, w.Duration, w.BID, e.Date, e.Name, e.Status
+        FROM Workshop w
+        INNER JOIN Event e ON w.EID = e.EID
+        INNER JOIN Badge b ON w.BID = b.bid
+        INNER JOIN Student s ON s.BID = b.bid
+        WHERE s.SID = ?
+        ORDER BY e.Date DESC
+    """;
+
+        return jdbcTemplate.query(sql, new Object[]{studentId}, (rs, rowNum) -> {
+            WorkshopResponse response = new WorkshopResponse();
+            response.setEid(rs.getString("EID"));
+            response.setDate(rs.getDate("Date"));
+            response.setName(rs.getString("Name"));
+            response.setStatus(rs.getString("Status"));
+            response.setLocation(rs.getString("Location"));
+            response.setTopic(rs.getString("Topic"));
+            response.setSpeaker(rs.getString("Speaker"));
+            response.setDuration(rs.getString("Duration"));
+            response.setBid(rs.getString("BID"));
+            return response;
+        });
+    }
+
 
 
 }
