@@ -1,6 +1,7 @@
 package com.example.g5be.controller;
 
 import com.example.g5be.dto.WorkshopRequest;
+import com.example.g5be.dto.WorkshopResponse;
 import com.example.g5be.model.Event;
 import com.example.g5be.model.Workshop;
 import com.example.g5be.service.EventService;
@@ -65,15 +66,14 @@ public class WorkshopController {
     public ResponseEntity<?> getWorkshopsForLecturer() {
         // Check if the user is a lecturer
         String role = (String) httpSession.getAttribute("role");
-        String lecturerId = (String) httpSession.getAttribute("id"); // Get LID from session
+        String studentId = (String) httpSession.getAttribute("id");
 
-        if (role == null || !role.equals("ROLE_LECTURER")) {
-            return ResponseEntity.status(403).body("Access Denied: Only lecturers can view workshops.");
+        if (role == null || !role.equals("ROLE_STUDENT")) {
+            return ResponseEntity.status(403).body("Access Denied: Only students can view their workshops.");
         }
 
         try {
-            // Fetch workshops for the lecturer
-            List<Workshop> workshops = workshopService.getWorkshopsByLecturerId(lecturerId);
+            List<WorkshopResponse> workshops = workshopService.getWorkshopsByStudentId(studentId);
             return ResponseEntity.ok(workshops);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
