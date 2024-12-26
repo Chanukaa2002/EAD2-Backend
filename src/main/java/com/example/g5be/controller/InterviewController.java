@@ -93,5 +93,20 @@ public class InterviewController {
         }
     }
 
+    @GetMapping("/interview/{eventId}/students")
+    public ResponseEntity<?> getStudentsForInterview(@PathVariable String eventId) {
+        // Validate Lecturer Role
+        String role = (String) httpSession.getAttribute("role");
+        if (role == null || !role.equals("ROLE_LECTURER")) {
+            return ResponseEntity.status(403).body("Access Denied: Only lecturers can view assigned students.");
+        }
+
+        try {
+            List<String> students = interviewService.getStudentsByEventId(eventId);
+            return ResponseEntity.ok(students);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
 
 }
