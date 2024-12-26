@@ -41,4 +41,8 @@ public class WorkshopService {
     public List<WorkshopResponse> getWorkshopsByStudentId(String studentId) {
         return workshopRepository.findWorkshopsByStudentId(studentId);
     }
+
+    public List<String> getStudentsByWorkshopEventId(String eventId) {
+        return workshopRepository.findStudentsByWorkshopEventId(eventId);
+    }
 }
