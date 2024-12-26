@@ -42,5 +42,8 @@ public class InterviewService {
         return interviewRepository.findInterviewsByStudentId(studentId);
     }
 
+    public List<String> getStudentsByEventId(String eventId) {
+        return interviewRepository.findStudentsByEventId(eventId);
+    }
 
 }

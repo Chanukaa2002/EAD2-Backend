@@ -62,4 +62,19 @@ public class InterviewRepository {
         });
     }
 
+
+    public List<String> findStudentsByEventId(String eventId) {
+        String sql = """
+        SELECT s.SID, s.Name, s.Email
+        FROM Student_Interview si
+        INNER JOIN Student s ON si.SID = s.SID
+        WHERE si.EID = ?
+        """;
+
+        return jdbcTemplate.query(sql, new Object[]{eventId}, (rs, rowNum) -> {
+            return String.format("ID: %s, Name: %s, Email: %s",
+                    rs.getString("SID"), rs.getString("Name"), rs.getString("Email"));
+        });
+    }
+
 }
