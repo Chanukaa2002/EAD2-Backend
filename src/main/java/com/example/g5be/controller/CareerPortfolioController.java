@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1/students")
 public class CareerPortfolioController {
@@ -32,6 +34,22 @@ public class CareerPortfolioController {
             // Update the portfolio for the logged-in student
             careerPortfolioService.updateCareerPortfolio(studentId, portfolio);
             return ResponseEntity.ok("Career portfolio updated successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/lecturer/{studentId}")
+    public ResponseEntity<?> getPortfolioForStudent(@PathVariable String studentId) {
+        // Validate Lecturer Role
+        String role = (String) httpSession.getAttribute("role");
+        if (role == null || !role.equals("ROLE_LECTURER")) {
+            return ResponseEntity.status(403).body("Access Denied: Only lecturers can view student portfolios.");
+        }
+
+        try {
+            Map<String, Object> portfolioAndStudentDetails = careerPortfolioService.getPortfolioAndStudentByStudentId(studentId);
+            return ResponseEntity.ok(portfolioAndStudentDetails);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
