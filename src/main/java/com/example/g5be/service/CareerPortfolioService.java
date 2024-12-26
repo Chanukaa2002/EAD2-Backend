@@ -5,6 +5,8 @@ import com.example.g5be.model.CareerPortfolio;
 import com.example.g5be.repository.CareerPortfolioRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 public class CareerPortfolioService {
 
@@ -48,5 +50,9 @@ public class CareerPortfolioService {
 
         // Update the portfolio in the database
         careerPortfolioRepository.update(portfolio);
+    }
+
+    public Map<String, Object> getPortfolioAndStudentByStudentId(String studentId) {
+        return careerPortfolioRepository.findPortfolioAndStudentByStudentId(studentId);
     }
 }
