@@ -105,4 +105,15 @@ public class EventRepository {
         String sql = "SELECT LID FROM Event WHERE EID = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{eid}, String.class);
     }
+
+
+    public List<Event> findEventsByLecturerId(String lecturerId) {
+        String sql = """
+        SELECT * 
+        FROM Event 
+        WHERE LID = ? 
+        ORDER BY Date DESC
+    """;
+        return jdbcTemplate.query(sql, new Object[]{lecturerId}, new EventRowMapper());
+    }
 }

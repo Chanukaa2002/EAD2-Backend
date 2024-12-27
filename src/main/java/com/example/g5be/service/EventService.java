@@ -45,4 +45,10 @@ public class EventService {
         Date today = new Date();
         return eventRepository.findEventsByStatus("Upcoming", today);
     }
+
+
+    public List<Event> findEventsByLecturerId(String lecturerId) {
+        return eventRepository.findEventsByLecturerId(lecturerId);
+    }
+
 }
