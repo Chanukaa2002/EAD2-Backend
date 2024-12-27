@@ -55,12 +55,14 @@ public class EventController {
     public ResponseEntity<?> getAllEvents() {
         // Check lecturer role from session
         String role = (String) httpSession.getAttribute("role");
+        String lecturerId = (String) httpSession.getAttribute("id");
+
         if (role == null || !role.equals("ROLE_LECTURER")) {
-            return ResponseEntity.status(403).body("Access Denied: Only lecturers can view the list of events.");
+            return ResponseEntity.status(403).body("Access Denied: Only lecturers can view their events.");
         }
 
         try {
-            List<Event> events = eventService.findAll();
+            List<Event> events = eventService.findEventsByLecturerId(lecturerId);
             return ResponseEntity.ok(events);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
