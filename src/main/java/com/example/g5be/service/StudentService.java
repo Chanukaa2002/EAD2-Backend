@@ -7,6 +7,8 @@ import com.example.g5be.service.CareerPortfolioService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import java.util.List;
 
 @Service
@@ -15,11 +17,14 @@ public class StudentService {
     private final StudentRepository studentRepository;
     private final CareerPortfolioService careerPortfolioService;
     private final HttpSession httpSession;
+    private final PasswordEncoder passwordEncoder;
 
-    public StudentService(StudentRepository studentRepository, CareerPortfolioService careerPortfolioService, HttpSession httpSession) {
+
+    public StudentService(StudentRepository studentRepository, CareerPortfolioService careerPortfolioService, HttpSession httpSession,PasswordEncoder passwordEncoder) {
         this.studentRepository = studentRepository;
         this.careerPortfolioService = careerPortfolioService;
         this.httpSession = httpSession;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public void registerStudent(Student student) {
@@ -28,6 +33,10 @@ public class StudentService {
         // Generate the next student ID
         String nextId = generateNextStudentId();
         student.setSid(nextId);
+
+        //hashing password
+        String hashedPassword = passwordEncoder.encode(student.getPassword());
+        student.setPassword(hashedPassword);
 
         // Save the student
         studentRepository.save(student);

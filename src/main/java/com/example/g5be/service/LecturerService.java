@@ -4,13 +4,17 @@ import com.example.g5be.model.Lecturer;
 import com.example.g5be.repository.LecturerRepository;
 import org.springframework.stereotype.Service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 @Service
 public class LecturerService {
 
     private final LecturerRepository lecturerRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public LecturerService(LecturerRepository lecturerRepository) {
+    public LecturerService(LecturerRepository lecturerRepository, PasswordEncoder passwordEncoder) {
         this.lecturerRepository = lecturerRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public void registerLecturer(Lecturer lecturer) {
@@ -25,6 +29,9 @@ public class LecturerService {
         if (lecturerRepository.existsByEmail(lecturer.getEmail())) {
             throw new RuntimeException("Email already exists");
         }
+
+        String hashedPassword = passwordEncoder.encode(lecturer.getPassword());
+        lecturer.setPassword(hashedPassword);
 
         // Save Lecturer to the database
         lecturerRepository.save(lecturer);

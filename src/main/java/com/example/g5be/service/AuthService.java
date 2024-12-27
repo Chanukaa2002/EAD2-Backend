@@ -11,6 +11,8 @@ import com.example.g5be.repository.StudentRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 @Service
 public class AuthService {
 
@@ -19,17 +21,20 @@ public class AuthService {
     private final StudentRepository studentRepository;
     private final JwtUtil jwtUtil;
     private final HttpSession httpSession;
+    private final PasswordEncoder passwordEncoder;
 
     public AuthService(AdminRepository adminRepository,
                        LecturerRepository lecturerRepository,
                        StudentRepository studentRepository,
                        JwtUtil jwtUtil,
-                       HttpSession httpSession) {
+                       HttpSession httpSession,
+                       PasswordEncoder passwordEncoder) {
         this.adminRepository = adminRepository;
         this.lecturerRepository = lecturerRepository;
         this.studentRepository = studentRepository;
         this.jwtUtil = jwtUtil;
         this.httpSession = httpSession;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // Authenticate Admin
@@ -46,7 +51,7 @@ public class AuthService {
     // Authenticate Lecturer
     public String authenticateLecturer(String username, String password) {
         Lecturer lecturer = lecturerRepository.findByUsername(username);
-        if (lecturer != null && lecturer.getPassword().equals(password)) {
+        if (lecturer != null && passwordEncoder.matches(password, lecturer.getPassword())) {
             String token = jwtUtil.generateToken(lecturer.getLid());
             storeSession(lecturer.getLid(), token, "ROLE_LECTURER");
             return token;
@@ -57,7 +62,7 @@ public class AuthService {
     // Authenticate Student
     public String authenticateStudent(String username, String password) {
         Student student = studentRepository.findByUsername(username);
-        if (student != null && student.getPassword().equals(password)) {
+        if (student != null && passwordEncoder.matches(password, student.getPassword())) {
             String token = jwtUtil.generateToken(student.getSid());
             storeSession(student.getSid(), token, "ROLE_STUDENT");
             return token;
