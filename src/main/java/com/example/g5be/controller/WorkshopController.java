@@ -62,18 +62,17 @@ public class WorkshopController {
         }
     }
 
-    @GetMapping("/workshops")
+    @GetMapping("/lecturer/workshops")
     public ResponseEntity<?> getWorkshopsForLecturer() {
-        // Check if the user is a lecturer
         String role = (String) httpSession.getAttribute("role");
-        String studentId = (String) httpSession.getAttribute("id");
+        String lecturerId = (String) httpSession.getAttribute("id");
 
-        if (role == null || !role.equals("ROLE_STUDENT")) {
-            return ResponseEntity.status(403).body("Access Denied: Only students can view their workshops.");
+        if (role == null || !role.equals("ROLE_LECTURER")) {
+            return ResponseEntity.status(403).body("Access Denied: Only lecturers can view their workshops.");
         }
 
         try {
-            List<WorkshopResponse> workshops = workshopService.getWorkshopsByStudentId(studentId);
+            List<WorkshopResponse> workshops = workshopService.getWorkshopsByLecturerId(lecturerId);
             return ResponseEntity.ok(workshops);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
