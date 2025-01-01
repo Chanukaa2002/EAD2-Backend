@@ -79,4 +79,19 @@ public class StudentController {
     }
 
 
+    @GetMapping("/admin/students")
+    public ResponseEntity<?> getAllStudents() {
+        try {
+            String role = (String) httpSession.getAttribute("role");
+            if (role == null || !role.equals("ROLE_ADMIN")) {
+                throw new RuntimeException("Access Denied: Only admins can perform this action.");
+            }
+
+            // Fetch all students
+            List<StudentResponse> students = studentService.getAllStudents();
+            return ResponseEntity.ok(students);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Error: " + e.getMessage());
+        }
+    }
 }
