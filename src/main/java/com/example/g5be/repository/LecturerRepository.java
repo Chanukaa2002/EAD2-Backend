@@ -4,6 +4,8 @@ import com.example.g5be.model.Lecturer;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class LecturerRepository {
 
@@ -79,5 +81,19 @@ public class LecturerRepository {
     public String findMaxLid() {
         String sql = "SELECT MAX(LID) FROM Lecturer";
         return jdbcTemplate.queryForObject(sql, String.class);
+    }
+
+    public List<Lecturer> findAll() {
+        String sql = "SELECT * FROM Lecturer";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            Lecturer lecturer = new Lecturer();
+            lecturer.setLid(rs.getString("LID"));
+            lecturer.setUsername(rs.getString("Username"));
+            lecturer.setName(rs.getString("Name"));
+            lecturer.setEmail(rs.getString("Email"));
+            lecturer.setPassword(rs.getString("Password"));
+            lecturer.setContact(rs.getString("Contact"));
+            return lecturer;
+        });
     }
 }

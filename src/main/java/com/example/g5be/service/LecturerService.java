@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
+
 @Service
 public class LecturerService {
 
@@ -74,5 +76,9 @@ public class LecturerService {
         int currentMaxId = Integer.parseInt(currentMaxLid.substring(1)); // Extract numeric part
         int nextId = currentMaxId + 1;
         return String.format("L%03d", nextId); // Format as L001, L002, etc.
+    }
+
+    public List<Lecturer> getAllLecturers() {
+        return lecturerRepository.findAll();
     }
 }
