@@ -45,4 +45,20 @@ public class BadgeController {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
+
+    @GetMapping("/admin/batches/all")
+    public ResponseEntity<?> getAllBadges() {
+        String role = (String) httpSession.getAttribute("role");
+
+        if (role == null || !role.equals("ROLE_ADMIN")) {
+            return ResponseEntity.status(403).body("Access Denied: Only admins can view all badges.");
+        }
+
+        try {
+            List<Badge> badges = badgeService.getAllBadges();
+            return ResponseEntity.ok(badges);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
 }
