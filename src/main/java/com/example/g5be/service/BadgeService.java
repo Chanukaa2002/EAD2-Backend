@@ -33,4 +33,8 @@ public class BadgeService {
         }
         return badgeRepository.findBadgesByLecturer(lecturerId);
     }
+
+    public List<Badge> getAllBadges() {
+        return badgeRepository.findAll();
+    }
 }
