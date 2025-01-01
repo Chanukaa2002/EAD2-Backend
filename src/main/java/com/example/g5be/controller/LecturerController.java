@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/admin/lecturer")
 public class LecturerController {
@@ -58,5 +60,19 @@ public class LecturerController {
         // Proceed with deletion
         lecturerService.deleteLecturer(lid);
         return ResponseEntity.ok("Lecturer deleted successfully");
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Lecturer>> getAllLecturers() {
+        // Check if the user is authorized as admin
+        String role = (String) httpSession.getAttribute("role");
+
+        if (role == null || !role.equals("ROLE_ADMIN")) {
+            return ResponseEntity.status(403).body(null);
+        }
+
+        // Retrieve all lecturers
+        List<Lecturer> lecturers = lecturerService.getAllLecturers();
+        return ResponseEntity.ok(lecturers);
     }
 }
