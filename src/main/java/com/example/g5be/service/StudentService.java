@@ -113,4 +113,29 @@ public class StudentService {
         // Update the student in the database
         studentRepository.update(updatedStudent);
     }
+
+    public List<StudentResponse> getAllStudents() {
+        List<Student> students = studentRepository.findAll();
+
+        // Convert Student to StudentResponse
+        return students.stream().map(student -> {
+            StudentResponse response = new StudentResponse();
+            response.setSid(student.getSid());
+            response.setName(student.getName());
+            response.setEmail(student.getEmail());
+            response.setUsername(student.getUsername());
+            response.setProfilePic(student.getProfilePic());
+            response.setAge(student.getAge());
+
+            // Set badge details
+            if (student.getBadge() != null) {
+                StudentResponse.BadgeResponse badgeResponse = new StudentResponse.BadgeResponse();
+                badgeResponse.setBid(student.getBadge().getBid());
+                badgeResponse.setName(student.getBadge().getName());
+                response.setBadge(badgeResponse);
+            }
+
+            return response;
+        }).toList();
+    }
 }
