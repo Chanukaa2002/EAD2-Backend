@@ -36,7 +36,7 @@ public class EventController {
         }
     }
 
-    @DeleteMapping("/{eid}")
+    @DeleteMapping("/event/delete/{eid}")
     public ResponseEntity<String> deleteEvent(@PathVariable String eid) {
         // Check lecturer role from session
         String role = (String) httpSession.getAttribute("role");
