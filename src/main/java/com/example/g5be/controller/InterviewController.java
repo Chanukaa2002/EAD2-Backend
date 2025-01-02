@@ -2,6 +2,7 @@ package com.example.g5be.controller;
 
 import com.example.g5be.dto.InterviewDTO;
 import com.example.g5be.dto.InterviewRequest;
+import com.example.g5be.dto.StudentDTO;
 import com.example.g5be.model.Event;
 import com.example.g5be.model.Interview;
 import com.example.g5be.service.InterviewService;
@@ -102,11 +103,13 @@ public class InterviewController {
         }
 
         try {
-            List<String> students = interviewService.getStudentsByEventId(eventId);
+            // Fetch students as DTOs
+            List<StudentDTO> students = interviewService.getStudentsByEventId(eventId);
             return ResponseEntity.ok(students);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
+
 
 }
