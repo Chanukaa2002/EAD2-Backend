@@ -31,6 +31,9 @@ public class CareerPortfolioController {
         }
 
         try {
+            // Assign studentId from session to the portfolio object
+            portfolio.setSid(studentId);
+
             // Update the portfolio for the logged-in student
             careerPortfolioService.updateCareerPortfolio(studentId, portfolio);
             return ResponseEntity.ok("Career portfolio updated successfully.");
@@ -38,6 +41,7 @@ public class CareerPortfolioController {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
+
 
     @GetMapping("/lecturer/{studentId}")
     public ResponseEntity<?> getPortfolioForStudent(@PathVariable String studentId) {
