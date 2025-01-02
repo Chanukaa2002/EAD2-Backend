@@ -61,6 +61,7 @@ public class SecurityConfig {
                         "/api/v1/student/received",
                         "/api/v1/lecturer/send",
                         "/api/v1/lecturer/received",
+                        "api/v1/session/details",
                         "/api/v1/**"
                 ).permitAll() // Allow unauthenticated access to these endpoints
                 .anyRequest().authenticated() // All other endpoints require authentication
