@@ -1,5 +1,6 @@
 package com.example.g5be.controller;
 
+import com.example.g5be.dto.BadgeSummaryDTO;
 import com.example.g5be.model.Badge;
 import com.example.g5be.service.BadgeService;
 import jakarta.servlet.http.HttpSession;
@@ -38,8 +39,8 @@ public class BadgeController {
         }
 
         try {
-            // Fetch badges for the lecturer
-            List<Badge> badges = badgeService.getBadgesByLecturer(lecturerId);
+            // Fetch badge summaries for the lecturer
+            List<BadgeSummaryDTO> badges = badgeService.getBadgeSummariesByLecturer(lecturerId);
             return ResponseEntity.ok(badges);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
@@ -50,17 +51,20 @@ public class BadgeController {
     public ResponseEntity<?> getAllBadges() {
         String role = (String) httpSession.getAttribute("role");
 
+        // Ensure the user is an admin
         if (role == null || !role.equals("ROLE_ADMIN")) {
             return ResponseEntity.status(403).body("Access Denied: Only admins can view all badges.");
         }
 
         try {
-            List<Badge> badges = badgeService.getAllBadges();
+            // Fetch all badge summaries
+            List<BadgeSummaryDTO> badges = badgeService.getBadgeSummaries();
             return ResponseEntity.ok(badges);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
+
 
     @PutMapping("/admin/batches/{bid}")
     public ResponseEntity<String> updateBadgeStatus(@PathVariable("bid") String bid, @RequestParam("status") String status) {
