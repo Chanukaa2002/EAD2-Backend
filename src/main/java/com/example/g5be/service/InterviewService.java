@@ -2,6 +2,7 @@ package com.example.g5be.service;
 
 
 import com.example.g5be.dto.InterviewDTO;
+import com.example.g5be.dto.StudentDTO;
 import com.example.g5be.model.Event;
 import com.example.g5be.model.Interview;
 import com.example.g5be.repository.EventRepository;
@@ -42,8 +43,9 @@ public class InterviewService {
         return interviewRepository.findInterviewsByStudentId(studentId);
     }
 
-    public List<String> getStudentsByEventId(String eventId) {
+    public List<StudentDTO> getStudentsByEventId(String eventId) {
         return interviewRepository.findStudentsByEventId(eventId);
     }
+
 
 }

@@ -2,6 +2,7 @@ package com.example.g5be.repository;
 
 
 import com.example.g5be.dto.InterviewDTO;
+import com.example.g5be.dto.StudentDTO;
 import com.example.g5be.model.Interview;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -63,18 +64,22 @@ public class InterviewRepository {
     }
 
 
-    public List<String> findStudentsByEventId(String eventId) {
+    public List<StudentDTO> findStudentsByEventId(String eventId) {
         String sql = """
-        SELECT s.SID, s.Name, s.Email
+        SELECT s.SID AS id, s.Name AS name, s.Email AS email
         FROM Student_Interview si
         INNER JOIN Student s ON si.SID = s.SID
         WHERE si.EID = ?
         """;
 
-        return jdbcTemplate.query(sql, new Object[]{eventId}, (rs, rowNum) -> {
-            return String.format("ID: %s, Name: %s, Email: %s",
-                    rs.getString("SID"), rs.getString("Name"), rs.getString("Email"));
-        });
+        return jdbcTemplate.query(sql, new Object[]{eventId}, (rs, rowNum) ->
+                new StudentDTO(
+                        rs.getString("id"),
+                        rs.getString("name"),
+                        rs.getString("email")
+                )
+        );
     }
+
 
 }
