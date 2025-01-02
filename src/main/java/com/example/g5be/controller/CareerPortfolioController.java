@@ -43,7 +43,7 @@ public class CareerPortfolioController {
     }
 
 
-    @GetMapping("/lecturer/{studentId}")
+    @GetMapping("/portfolio/{studentId}")
     public ResponseEntity<?> getPortfolioForStudent(@PathVariable String studentId) {
         // Validate Lecturer Role
         String role = (String) httpSession.getAttribute("role");
