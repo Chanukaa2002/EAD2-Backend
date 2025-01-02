@@ -1,5 +1,6 @@
 package com.example.g5be.controller;
 
+import com.example.g5be.dto.StudentDTO;
 import com.example.g5be.dto.WorkshopRequest;
 import com.example.g5be.dto.WorkshopResponse;
 import com.example.g5be.model.Event;
@@ -107,10 +108,12 @@ public class WorkshopController {
         }
 
         try {
-            List<String> students = workshopService.getStudentsByWorkshopEventId(eventId);
-            return ResponseEntity.ok(students);
+            // Fetch student details as DTOs
+            List<StudentDTO> students = workshopService.getStudentsByWorkshopEventId(eventId);
+            return ResponseEntity.ok(students); // Return as JSON
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
+
 }

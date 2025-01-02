@@ -1,6 +1,7 @@
 package com.example.g5be.service;
 
 
+import com.example.g5be.dto.StudentDTO;
 import com.example.g5be.dto.WorkshopResponse;
 import com.example.g5be.model.Event;
 import com.example.g5be.model.Workshop;
@@ -42,7 +43,9 @@ public class WorkshopService {
         return workshopRepository.findWorkshopsByStudentId(studentId);
     }
 
-    public List<String> getStudentsByWorkshopEventId(String eventId) {
+
+    public List<StudentDTO> getStudentsByWorkshopEventId(String eventId) {
         return workshopRepository.findStudentsByWorkshopEventId(eventId);
     }
+
 }
