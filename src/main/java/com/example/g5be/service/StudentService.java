@@ -51,9 +51,16 @@ public class StudentService {
         // Ensure the SID is set correctly
         updatedStudent.setSid(sid);
 
+        // Encode the password if it is not null or empty
+        if (updatedStudent.getPassword() != null && !updatedStudent.getPassword().isEmpty()) {
+            String hashedPassword = passwordEncoder.encode(updatedStudent.getPassword());
+            updatedStudent.setPassword(hashedPassword);
+        }
+
         // Update the student
         studentRepository.update(updatedStudent);
     }
+
 
     public void deleteStudent(String sid) {
         checkAdminAccess();
@@ -110,9 +117,16 @@ public class StudentService {
         // Ensure the SID is set correctly
         updatedStudent.setSid(studentId);
 
+        // Encode the password if it is not null or empty
+        if (updatedStudent.getPassword() != null && !updatedStudent.getPassword().isEmpty()) {
+            String hashedPassword = passwordEncoder.encode(updatedStudent.getPassword());
+            updatedStudent.setPassword(hashedPassword);
+        }
+
         // Update the student in the database
         studentRepository.update(updatedStudent);
     }
+
 
     public List<StudentResponse> getAllStudents() {
         List<Student> students = studentRepository.findAll();
