@@ -61,4 +61,20 @@ public class BadgeController {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
+
+    @PutMapping("/admin/batches/{bid}")
+    public ResponseEntity<String> updateBadgeStatus(@PathVariable("bid") String bid, @RequestParam("status") String status) {
+        String role = (String) httpSession.getAttribute("role");
+
+        if (role == null || !role.equals("ROLE_ADMIN")) {
+            return ResponseEntity.status(403).body("Access Denied: Only admins can update badge status.");
+        }
+
+        try {
+            badgeService.updateBadgeStatus(bid, status);
+            return ResponseEntity.ok("Badge status updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
 }

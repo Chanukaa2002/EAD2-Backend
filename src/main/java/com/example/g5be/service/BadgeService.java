@@ -37,4 +37,19 @@ public class BadgeService {
     public List<Badge> getAllBadges() {
         return badgeRepository.findAll();
     }
+
+    public void updateBadgeStatus(String bid, String status) {
+        String role = (String) httpSession.getAttribute("role");
+        if (role == null || !role.equals("ROLE_ADMIN")) {
+            throw new RuntimeException("Access Denied: Only admins can update badge status.");
+        }
+
+        Badge badge = badgeRepository.findById(bid);
+        if (badge == null) {
+            throw new RuntimeException("Badge not found.");
+        }
+
+        badge.setStatus(status); // Update the status of the badge
+        badgeRepository.save(badge); // Save the updated badge
+    }
 }
