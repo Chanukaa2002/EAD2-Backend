@@ -2100,6 +2100,126 @@ paths:
                     type: string
                     example: "No students found for the workshop."
 
+  /student/profile:
+    get:
+      summary: Get Student Profile Details
+      description: Fetch the details of a student profile.
+      tags:
+        - Student
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sid:
+                    type: string
+                    description: Student ID
+                    example: S010
+                  name:
+                    type: string
+                    description: Name of the student
+                    example: test
+                  email:
+                    type: string
+                    description: Email of the student
+                    example: test@email.com
+                  username:
+                    type: string
+                    description: Username of the student
+                    example: test
+                  profilePic:
+                    type: string
+                    nullable: true
+                    description: Profile picture URL of the student
+                    example: null
+                  age:
+                    type: integer
+                    description: Age of the student
+                    example: 20
+                  badge:
+                    type: object
+                    description: Badge details
+                    properties:
+                      bid:
+                        type: string
+                        description: Badge ID
+                        example: GADSE232F
+                      name:
+                        type: string
+                        description: Name of the badge
+                        example: Diploma SE Badge
+        '404':
+          description: Student profile not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+                    example: Student profile not found
+  /students/getportfolio:
+    get:
+      summary: Get student portfolio
+      description: Retrieve the portfolio details for a specific student.
+      operationId: getStudentPortfolio
+      tags:
+        - Student
+      responses:
+        '200':
+          description: Successful response with portfolio details.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  studentId:
+                    type: string
+                    example: S010
+                  studentEmail:
+                    type: string
+                    example: test@email.com
+                  studentAge:
+                    type: integer
+                    example: 20
+                  portfolioId:
+                    type: string
+                    example: C007
+                  portfolioGithubUsername:
+                    type: string
+                    example: test
+                  portfolioAchievements:
+                    type: string
+                    example: NONE
+                  studentName:
+                    type: string
+                    example: test
+                  studentUsername:
+                    type: string
+                    example: test
+                  portfolioDescription:
+                    type: string
+                    example: test
+                  studentProfilePic:
+                    type: string
+                    example: null
+                  portfolioEducation:
+                    type: string
+                    example: NIBM DIPLOMA
+        '404':
+          description: Portfolio not found for the specified student.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Portfolio not found for the specified student.
 
 
 
