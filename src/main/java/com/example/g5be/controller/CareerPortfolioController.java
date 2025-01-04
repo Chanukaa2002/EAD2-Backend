@@ -58,4 +58,23 @@ public class CareerPortfolioController {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
+
+    @GetMapping("/getportfolio")
+    public ResponseEntity<?> getLoggedStudentPortfolio() {
+        String role = (String) httpSession.getAttribute("role");
+        String studentId = (String) httpSession.getAttribute("id");
+
+        if (role == null || !role.equals("ROLE_STUDENT")) {
+            return ResponseEntity.status(403).body("Access Denied: Only students can access their portfolio.");
+        }
+
+        try {
+            Map<String, Object> portfolioAndStudentDetails = careerPortfolioService.getPortfolioAndStudentByStudentId(studentId);
+            return ResponseEntity.ok(portfolioAndStudentDetails);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
+
+
 }

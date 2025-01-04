@@ -152,4 +152,29 @@ public class StudentService {
             return response;
         }).toList();
     }
+
+    public StudentResponse getStudentProfile(String studentId) {
+        Student student = studentRepository.findById(studentId);
+        if (student == null) {
+            throw new RuntimeException("Student not found");
+        }
+
+        StudentResponse response = new StudentResponse();
+        response.setSid(student.getSid());
+        response.setName(student.getName());
+        response.setEmail(student.getEmail());
+        response.setUsername(student.getUsername());
+        response.setProfilePic(student.getProfilePic());
+        response.setAge(student.getAge());
+
+        if (student.getBadge() != null) {
+            StudentResponse.BadgeResponse badgeResponse = new StudentResponse.BadgeResponse();
+            badgeResponse.setBid(student.getBadge().getBid());
+            badgeResponse.setName(student.getBadge().getName());
+            response.setBadge(badgeResponse);
+        }
+
+        return response;
+    }
+
 }

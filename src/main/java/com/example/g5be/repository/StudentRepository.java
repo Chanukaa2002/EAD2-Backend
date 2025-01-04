@@ -141,4 +141,36 @@ public class StudentRepository {
         });
     }
 
+    public Student findById(String sid) {
+        String sql = """
+        SELECT s.SID, s.Name, s.Email, s.Username, s.Password, s.ProfilePic, s.Age, b.bid AS BadgeID, b.name AS BadgeName
+        FROM Student s
+        LEFT JOIN Badge b ON s.BID = b.bid
+        WHERE s.SID = ?
+    """;
+
+        try {
+            return jdbcTemplate.queryForObject(sql, new Object[]{sid}, (rs, rowNum) -> {
+                Student student = new Student();
+                student.setSid(rs.getString("SID"));
+                student.setName(rs.getString("Name"));
+                student.setEmail(rs.getString("Email"));
+                student.setUsername(rs.getString("Username"));
+                student.setPassword(rs.getString("Password"));
+                student.setProfilePic(rs.getString("ProfilePic"));
+                student.setAge(rs.getInt("Age"));
+
+                Badge badge = new Badge();
+                badge.setBid(rs.getString("BadgeID"));
+                badge.setName(rs.getString("BadgeName"));
+                student.setBadge(badge);
+
+                return student;
+            });
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+
 }

@@ -94,4 +94,22 @@ public class StudentController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Error: " + e.getMessage());
         }
     }
+
+    @GetMapping("/student/profile")
+    public ResponseEntity<?> getStudentProfile() {
+        String role = (String) httpSession.getAttribute("role");
+        String studentId = (String) httpSession.getAttribute("id");
+
+        if (role == null || !role.equals("ROLE_STUDENT")) {
+            return ResponseEntity.status(403).body("Access Denied: Only students can access their profile.");
+        }
+
+        try {
+            StudentResponse studentProfile = studentService.getStudentProfile(studentId);
+            return ResponseEntity.ok(studentProfile);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
+
 }
