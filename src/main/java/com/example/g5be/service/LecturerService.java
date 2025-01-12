@@ -51,7 +51,7 @@ public class LecturerService {
         existingLecturer.setEmail(updatedLecturer.getEmail());
         existingLecturer.setUsername(updatedLecturer.getUsername());
         existingLecturer.setContact(updatedLecturer.getContact());
-        String hashedPassword = passwordEncoder.encode(existingLecturer.getPassword());
+        String hashedPassword = passwordEncoder.encode(updatedLecturer.getPassword());
         existingLecturer.setPassword(hashedPassword);
 
         lecturerRepository.update(existingLecturer);
