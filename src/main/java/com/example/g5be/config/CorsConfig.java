@@ -11,7 +11,7 @@ public class CorsConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOriginPatterns(
-                        "http://16.171.239.119:8080", // Allow backend public IP URL
+                        "http://13.51.233.133:8080", // Allow backend public IP URL
                         "http://nibmevex.edu.lk",     // Allow frontend URL
                         "http://localhost:*"         // For local development
                 )
