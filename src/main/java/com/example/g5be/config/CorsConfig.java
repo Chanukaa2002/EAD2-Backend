@@ -10,10 +10,15 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOriginPatterns("http://localhost:*", "http://127.0.0.1:*") // Allow localhost
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Include OPTIONS for preflight
-                .allowedHeaders("*") // Allow all headers
-                .allowCredentials(true); // Allow cookies/credentials
+                .allowedOriginPatterns(
+                        "http://16.171.239.119:8080", // Allow frontend URL
+                        "http://localhost:*" // For local development
+                )
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowCredentials(true) // Allow cookies/credentials
+                .allowedHeaders("*")
+                .exposedHeaders("Set-Cookie");
     }
 }
+
 
