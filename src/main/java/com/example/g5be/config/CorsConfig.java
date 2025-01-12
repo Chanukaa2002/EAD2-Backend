@@ -11,12 +11,12 @@ public class CorsConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOriginPatterns(
-                        "http://13.51.233.133:8080", // Allow backend public IP URL
-                        "http://nibmevex.edu.lk",     // Allow frontend URL
-                        "http://localhost:*"         // For local development
+                        "http://13.51.233.133:8080",    // Backend public IP
+                        "http://nibmevex.edu.lk:8080",  // Frontend domain with port
+                        "http://localhost:8081"         // Local development
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowCredentials(true) // Allow cookies/credentials
+                .allowCredentials(true)
                 .allowedHeaders("*")
                 .exposedHeaders("Set-Cookie");
     }
